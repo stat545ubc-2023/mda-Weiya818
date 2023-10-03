@@ -1,4 +1,4 @@
-# STAT 545A Mini Data Analysis Project M1 (Weiya Zhu)
+# STAT 545A Mini Data Analysis Project M1 _(Weiya Zhu)_
 
 ## Project Description
  * Explore 4 datasets and choose one of them to perform data analysis.
@@ -13,8 +13,8 @@
   * Git clone the github repository to the local R studio
   * "Knit" the mini_data_analysis_1.Rmd file
   * It will generate a mini_data_analysis_1.md file
-  * Read through the generated md file that contains all the contents of the Mini Data Analysis Project (Milestone 1)
-  * The dataset I am analyzing is called _vancouver_trees_ dataset.
+  * Read through the generated md file that contains all the contents of the Mini Data Analysis Project (M1)
+  * The dataset I analyze is called _vancouver_trees_ dataset.
   
 ## Files in the Repository
   * README.md
