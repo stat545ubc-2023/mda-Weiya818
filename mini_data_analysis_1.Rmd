@@ -196,7 +196,7 @@ Make sure that you're using dplyr and ggplot2 rather than base R for this task. 
 <!-------------------------- Start your work below ---------------------------->
 ### Exercise 1: Plot the distribution of a numeric variable
 
-```{r Exercise1_histogram}
+```{r Exercise1_Histogram}
 #refer to choice 1 above
 
 # Load library
@@ -219,7 +219,7 @@ ggplot(vancouver_trees, aes(x = on_street_block )) +
 The reason I explore the distribution of on_street_block using a histogram to view the frequency for each street block is that I would like to identifying the street blocks that have a higher concentration of trees. This information is valuable for urban planning and the possible tree maintenance in the future. For example, in urban planning, the tree planting schedule in the street blocks with relatively lower distribution of trees might needed to be prioritized.
 
 ### Exercise 2: Investigating missing values and generate plot
-```{r Exercise2_missing_values_barchart}
+```{r Exercise2_Missing_Values_Barchart}
 #refer to choice 3 above
 
 # calculate # of missing values for each variable
@@ -246,7 +246,7 @@ ggplot(missingValFiltered, aes(x=variableName, y = missingCount)) +
 This exercise is very important in data analysis since it will help us to identify the quality of the dataset. For example, it can tell us which columns has missing values (NA) so that we preprocess the dataset, it can tell us we should do corresponding data cleaning or imputation. Meanwhile, it can let us know the distribution of missing values for all variables and give us a better insights into the column variables where incomplete information may exist.
 
 ### Exercise 3: Make a new tibble with a subset of the data
-```{r Exercise3_new_tibble}
+```{r Exercise3_New_Tibble}
 # refer to choice 7 above
 # create a new tibble with the the following three selected variables
 treeSubset <- vancouver_trees %>%
@@ -274,7 +274,7 @@ treeSummary
 For this exercise, I created a new tibble containing three column variables, "genus_name", "species_name", and "assigned". For the research question above, I would like to know "What is the relationship between tree species and their assigned status in the dataset." This is the main reason I chose to do this exercise. After creating the new tibble, I think I should further look deep into the dataset to see the relationships between these variables. Therefore, I group by species_name and added some new variables. As a result, the total number of trees for each species and the count of trees that are assigned (Y) and unassigned (N) can be shown clearly in the treeSummary tibble.This is useful and it is relate to my research question. From the result, we can clearly know that SERRULATA is the species with the most number of trees
 
 ### Exercise 4: Density Plot
-```{r Exercise4_density_plot}
+```{r Exercise4_Density_Plot}
 # refer to choice 8 above
 # Create a density plots to explore whether the root barrier will influence the diameter of trees.
 

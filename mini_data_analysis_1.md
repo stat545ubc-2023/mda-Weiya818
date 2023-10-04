@@ -562,7 +562,7 @@ ggplot(vancouver_trees, aes(x = on_street_block )) +
        y = "Frequency")
 ```
 
-![](mini_data_analysis_1_files/figure-gfm/Exercise1_histogram-1.png)<!-- -->
+![](mini_data_analysis_1_files/figure-gfm/Exercise1_Histogram-1.png)<!-- -->
 
 **Brief Explanation for Exercise 1**
 
@@ -598,7 +598,7 @@ ggplot(missingValFiltered, aes(x=variableName, y = missingCount)) +
        y = "Missing Count")
 ```
 
-![](mini_data_analysis_1_files/figure-gfm/Exercise2_missing_values_barchart-1.png)<!-- -->
+![](mini_data_analysis_1_files/figure-gfm/Exercise2_Missing_Values_Barchart-1.png)<!-- -->
 
 **Brief Explanation for Exercise 2**
 
@@ -705,7 +705,7 @@ ggplot(data = filtered_dataset, aes(x = diameter)) +
   theme_minimal()
 ```
 
-![](mini_data_analysis_1_files/figure-gfm/Exercise4_density_plot-1.png)<!-- -->
+![](mini_data_analysis_1_files/figure-gfm/Exercise4_Density_Plot-1.png)<!-- -->
 
 **Brief Explanation for Exercise 4**
 
