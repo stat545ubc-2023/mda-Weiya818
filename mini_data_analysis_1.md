@@ -143,7 +143,48 @@ whether the dataset is of appropriate complexity. Also, include a
 **brief** description of the dataset here to help the teaching team
 understand your data.
 
+<!-------------------------- Start your work below ---------------------------->
+
+1: apt_buildings
+
+2: building_permits
+
+3: cancer_sample
+
+4: vancouver_trees
+
+<!----------------------------------------------------------------------------->
+
+1.2 **(6 points)** One way to narrowing down your selection is to
+*explore* the datasets. Use your knowledge of dplyr to find out at least
+*3* attributes about each of these datasets (an attribute is something
+such as number of rows, variables, class type…). The goal here is to
+have an idea of *what the data looks like*.
+
+*Hint:* This is one of those times when you should think about the
+cleanliness of your analysis. I added a single code chunk for you below,
+but do you want to use more than one? Would you like to write more
+comments outside of the code chunk?
+
+<!-------------------------- Start your work below ---------------------------->
+
+### Exploration for apt_buildings dataset:
+
+- **Number of rows and columns (size):** apt_buildings dataset has 3455
+  rows, 37 column variables, which means it is a fairly large dataset.
+- **Data types:** Most columns are of the type character (chr), but
+  there are also some columns with numeric data types (dbl).
+- **Missing values:** Some columns like amenities contains NA values,
+  which indicates we might need to tidy the dataset.
+- **Binary variables:** Some columns like locker_or_storage_room and
+  laundry_room seem to have binary variable type, which means the values
+  of the columns are simply YES or NO.
+- **Categorical variables:** Some columns like heating_type and
+  property_type may represent categorical variables with different
+  levels.
+
 ``` r
+### EXPLORE HERE ###
 glimpse(apt_buildings)
 ```
 
@@ -188,6 +229,47 @@ glimpse(apt_buildings)
     ## $ no_barrier_free_accessible_units <dbl> 2, 0, 0, 42, 0, NA, 14, 0, 0, 1, 25, …
 
 ``` r
+apt_buildings
+```
+
+    ## # A tibble: 3,455 × 37
+    ##       id air_conditioning amenities             balconies barrier_free_accessi…¹
+    ##    <dbl> <chr>            <chr>                 <chr>     <chr>                 
+    ##  1 10359 NONE             Outdoor rec faciliti… YES       YES                   
+    ##  2 10360 NONE             Outdoor pool          YES       NO                    
+    ##  3 10361 NONE             <NA>                  YES       NO                    
+    ##  4 10362 NONE             <NA>                  YES       YES                   
+    ##  5 10363 NONE             <NA>                  NO        NO                    
+    ##  6 10364 NONE             <NA>                  NO        NO                    
+    ##  7 10365 NONE             <NA>                  NO        YES                   
+    ##  8 10366 CENTRAL AIR      Indoor pool , Indoor… YES       NO                    
+    ##  9 10367 NONE             <NA>                  YES       YES                   
+    ## 10 10368 NONE             Indoor recreation ro… YES       YES                   
+    ## # ℹ 3,445 more rows
+    ## # ℹ abbreviated name: ¹​barrier_free_accessibilty_entr
+    ## # ℹ 32 more variables: bike_parking <chr>, exterior_fire_escape <chr>,
+    ## #   fire_alarm <chr>, garbage_chutes <chr>, heating_type <chr>, intercom <chr>,
+    ## #   laundry_room <chr>, locker_or_storage_room <chr>, no_of_elevators <dbl>,
+    ## #   parking_type <chr>, pets_allowed <chr>, prop_management_company_name <chr>,
+    ## #   property_type <chr>, rsn <dbl>, separate_gas_meters <chr>, …
+
+### Exploration for building_permits dataset:
+
+- **Number of rows and columns (size):** building_permits dataset has
+  20680 rows, 14 column variables
+- **Data types:** Most columns are of the type character (chr), but
+  there are also some columns with numeric data types (dbl). There is a
+  column “issue_date” is of the type (date), which contains data
+  information.
+- **Missing values:** Some columns like project_description and
+  building_contractor contains NA values, which indicates we might need
+  to tidy the dataset.
+- **Categorical variables:** Some columns like type_of_work may
+  represent categorical variables with different levels. The dataset
+  does not seem to have any binary variables.
+
+``` r
+### EXPLORE HERE ###
 glimpse(building_permits)
 ```
 
@@ -208,7 +290,18 @@ glimpse(building_permits)
     ## $ year                        <dbl> 2017, 2017, 2017, 2017, 2017, 2017, 2017, …
     ## $ bi_id                       <dbl> 524, 535, 539, 541, 543, 546, 547, 548, 54…
 
+### Exploration for cancer_sample dataset:
+
+- **Number of rows and columns (size):** cancer_sample dataset has 569
+  rows, 32 column variables, compares to the previous dataset, this
+  dataset is fairly smaller.
+- **Data types:** Most the columns are with numeric data types (dbl).
+  There is only one column “diagnosis” is of the type character (chr).
+- **Missing values:** There is no NA value in the cancer_sample dataset,
+  which means this dataset is pretty tidy!
+
 ``` r
+### EXPLORE HERE ###
 glimpse(cancer_sample)
 ```
 
@@ -248,77 +341,29 @@ glimpse(cancer_sample)
     ## $ fractal_dimension_worst <dbl> 0.11890, 0.08902, 0.08758, 0.17300, 0.07678, 0…
 
 ``` r
-glimpse(flow_sample)
+if (any(is.na(cancer_sample))) {
+  cat("NA values exists in the tibble.")
+} else {
+  cat("NA values does not exist in the tibble.")
+}
 ```
 
-    ## Rows: 218
-    ## Columns: 7
-    ## $ station_id   <chr> "05BB001", "05BB001", "05BB001", "05BB001", "05BB001", "0…
-    ## $ year         <dbl> 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 191…
-    ## $ extreme_type <chr> "maximum", "maximum", "maximum", "maximum", "maximum", "m…
-    ## $ month        <dbl> 7, 6, 6, 8, 6, 6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 7, 5, 7, 6, …
-    ## $ day          <dbl> 7, 12, 14, 25, 11, 18, 27, 20, 17, 15, 22, 3, 9, 5, 14, 5…
-    ## $ flow         <dbl> 314, 230, 264, 174, 232, 214, 236, 309, 174, 345, 185, 24…
-    ## $ sym          <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+    ## NA values does not exist in the tibble.
+
+### Exploration for vancouver_trees dataset:
+
+- **Number of rows and columns (size):** vancouver_trees dataset has
+  146611 rows, 20 column variables, which means it is a very large
+  dataset.
+- **Data types:** Most columns are of the type character (chr), but
+  there are also some columns with numeric data types (dbl). There is a
+  column “date_planted” is of the type (date), which contains date
+  information of when the tree was planted.
+- **Missing values:** Some columns like cultivar_name contains NA
+  values, which indicates we might need to tidy the dataset.
 
 ``` r
-glimpse(parking_meters)
-```
-
-    ## Rows: 10,032
-    ## Columns: 22
-    ## $ meter_head     <chr> "Twin", "Pay Station", "Twin", "Single", "Twin", "Twin"…
-    ## $ r_mf_9a_6p     <chr> "$2.00", "$1.00", "$1.00", "$1.00", "$2.00", "$2.00", "…
-    ## $ r_mf_6p_10     <chr> "$4.00", "$1.00", "$1.00", "$1.00", "$1.00", "$1.00", "…
-    ## $ r_sa_9a_6p     <chr> "$2.00", "$1.00", "$1.00", "$1.00", "$2.00", "$2.00", "…
-    ## $ r_sa_6p_10     <chr> "$4.00", "$1.00", "$1.00", "$1.00", "$1.00", "$1.00", "…
-    ## $ r_su_9a_6p     <chr> "$2.00", "$1.00", "$1.00", "$1.00", "$2.00", "$2.00", "…
-    ## $ r_su_6p_10     <chr> "$4.00", "$1.00", "$1.00", "$1.00", "$1.00", "$1.00", "…
-    ## $ rate_misc      <chr> NA, "$ .50", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
-    ## $ time_in_effect <chr> "METER IN EFFECT: 9:00 AM TO 10:00 PM", "METER IN EFFEC…
-    ## $ t_mf_9a_6p     <chr> "2 Hr", "10 Hrs", "2 Hr", "2 Hr", "2 Hr", "3 Hr", "2 Hr…
-    ## $ t_mf_6p_10     <chr> "4 Hr", "10 Hrs", "4 Hr", "4 Hr", "4 Hr", "4 Hr", "4 Hr…
-    ## $ t_sa_9a_6p     <chr> "2 Hr", "10 Hrs", "2 Hr", "2 Hr", "2 Hr", "3 Hr", "2 Hr…
-    ## $ t_sa_6p_10     <chr> "4 Hr", "10 Hrs", "4 Hr", "4 Hr", "4 Hr", "4 Hr", "4 Hr…
-    ## $ t_su_9a_6p     <chr> "2 Hr", "10 Hrs", "2 Hr", "2 Hr", "2 Hr", "3 Hr", "2 Hr…
-    ## $ t_su_6p_10     <chr> "4 Hr", "10 Hrs", "4 Hr", "4 Hr", "4 Hr", "4 Hr", "4 Hr…
-    ## $ time_misc      <chr> NA, "No Time Limit", NA, NA, NA, NA, NA, NA, NA, NA, NA…
-    ## $ credit_card    <chr> "No", "Yes", "No", "No", "No", "No", "No", "No", "No", …
-    ## $ pay_phone      <chr> "66890", "59916", "57042", "57159", "51104", "60868", "…
-    ## $ longitude      <dbl> -123.1289, -123.0982, -123.1013, -123.1862, -123.1278, …
-    ## $ latitude       <dbl> 49.28690, 49.27215, 49.25468, 49.26341, 49.26354, 49.27…
-    ## $ geo_local_area <chr> "West End", "Strathcona", "Riley Park", "West Point Gre…
-    ## $ meter_id       <chr> "670805", "471405", "C80145", "D03704", "301023", "5913…
-
-``` r
-glimpse(steam_games)
-```
-
-    ## Rows: 40,833
-    ## Columns: 21
-    ## $ id                       <dbl> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14…
-    ## $ url                      <chr> "https://store.steampowered.com/app/379720/DO…
-    ## $ types                    <chr> "app", "app", "app", "app", "app", "bundle", …
-    ## $ name                     <chr> "DOOM", "PLAYERUNKNOWN'S BATTLEGROUNDS", "BAT…
-    ## $ desc_snippet             <chr> "Now includes all three premium DLC packs (Un…
-    ## $ recent_reviews           <chr> "Very Positive,(554),- 89% of the 554 user re…
-    ## $ all_reviews              <chr> "Very Positive,(42,550),- 92% of the 42,550 u…
-    ## $ release_date             <chr> "May 12, 2016", "Dec 21, 2017", "Apr 24, 2018…
-    ## $ developer                <chr> "id Software", "PUBG Corporation", "Harebrain…
-    ## $ publisher                <chr> "Bethesda Softworks,Bethesda Softworks", "PUB…
-    ## $ popular_tags             <chr> "FPS,Gore,Action,Demons,Shooter,First-Person,…
-    ## $ game_details             <chr> "Single-player,Multi-player,Co-op,Steam Achie…
-    ## $ languages                <chr> "English,French,Italian,German,Spanish - Spai…
-    ## $ achievements             <dbl> 54, 37, 128, NA, NA, NA, 51, 55, 34, 43, 72, …
-    ## $ genre                    <chr> "Action", "Action,Adventure,Massively Multipl…
-    ## $ game_description         <chr> "About This Game Developed by id software, th…
-    ## $ mature_content           <chr> NA, "Mature Content Description  The develope…
-    ## $ minimum_requirements     <chr> "Minimum:,OS:,Windows 7/8.1/10 (64-bit versio…
-    ## $ recommended_requirements <chr> "Recommended:,OS:,Windows 7/8.1/10 (64-bit ve…
-    ## $ original_price           <dbl> 19.99, 29.99, 39.99, 44.99, 0.00, NA, 59.99, …
-    ## $ discount_price           <dbl> 14.99, NA, NA, NA, NA, 35.18, 70.42, 17.58, N…
-
-``` r
+### EXPLORE HERE ###
 glimpse(vancouver_trees)
 ```
 
@@ -345,51 +390,39 @@ glimpse(vancouver_trees)
     ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
     ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
 
-<!-------------------------- Start your work below ---------------------------->
-
-1: CHOICE_1_HERE  
-2: CHOICE_2_HERE  
-3: CHOICE_3_HERE  
-4: CHOICE_4_HERE
-
-<!----------------------------------------------------------------------------->
-
-1.2 **(6 points)** One way to narrowing down your selection is to
-*explore* the datasets. Use your knowledge of dplyr to find out at least
-*3* attributes about each of these datasets (an attribute is something
-such as number of rows, variables, class type…). The goal here is to
-have an idea of *what the data looks like*.
-
-*Hint:* This is one of those times when you should think about the
-cleanliness of your analysis. I added a single code chunk for you below,
-but do you want to use more than one? Would you like to write more
-comments outside of the code chunk?
-
-<!-------------------------- Start your work below ---------------------------->
-
 ``` r
-### EXPLORE HERE ###
-steam_games
+vancouver_trees
 ```
 
-    ## # A tibble: 40,833 × 21
-    ##       id url    types name  desc_snippet recent_reviews all_reviews release_date
-    ##    <dbl> <chr>  <chr> <chr> <chr>        <chr>          <chr>       <chr>       
-    ##  1     1 https… app   DOOM  Now include… Very Positive… Very Posit… May 12, 2016
-    ##  2     2 https… app   PLAY… PLAYERUNKNO… Mixed,(6,214)… Mixed,(836… Dec 21, 2017
-    ##  3     3 https… app   BATT… Take comman… Mixed,(166),-… Mostly Pos… Apr 24, 2018
-    ##  4     4 https… app   DayZ  The post-so… Mixed,(932),-… Mixed,(167… Dec 13, 2018
-    ##  5     5 https… app   EVE … EVE Online … Mixed,(287),-… Mostly Pos… May 6, 2003 
-    ##  6     6 https… bund… Gran… Grand Theft… NaN            NaN         NaN         
-    ##  7     7 https… app   Devi… The ultimat… Very Positive… Very Posit… Mar 7, 2019 
-    ##  8     8 https… app   Huma… Human: Fall… Very Positive… Very Posit… Jul 22, 2016
-    ##  9     9 https… app   They… They Are Bi… Very Positive… Very Posit… Dec 12, 2017
-    ## 10    10 https… app   Warh… In a world … <NA>           Mixed,(904… May 31, 2019
-    ## # ℹ 40,823 more rows
-    ## # ℹ 13 more variables: developer <chr>, publisher <chr>, popular_tags <chr>,
-    ## #   game_details <chr>, languages <chr>, achievements <dbl>, genre <chr>,
-    ## #   game_description <chr>, mature_content <chr>, minimum_requirements <chr>,
-    ## #   recommended_requirements <chr>, original_price <dbl>, discount_price <dbl>
+    ## # A tibble: 146,611 × 20
+    ##    tree_id civic_number std_street    genus_name species_name cultivar_name  
+    ##      <dbl>        <dbl> <chr>         <chr>      <chr>        <chr>          
+    ##  1  149556          494 W 58TH AV     ULMUS      AMERICANA    BRANDON        
+    ##  2  149563          450 W 58TH AV     ZELKOVA    SERRATA      <NA>           
+    ##  3  149579         4994 WINDSOR ST    STYRAX     JAPONICA     <NA>           
+    ##  4  149590          858 E 39TH AV     FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ##  5  149604         5032 WINDSOR ST    ACER       CAMPESTRE    <NA>           
+    ##  6  149616          585 W 61ST AV     PYRUS      CALLERYANA   CHANTICLEER    
+    ##  7  149617         4909 SHERBROOKE ST ACER       PLATANOIDES  COLUMNARE      
+    ##  8  149618         4925 SHERBROOKE ST ACER       PLATANOIDES  COLUMNARE      
+    ##  9  149619         4969 SHERBROOKE ST ACER       PLATANOIDES  COLUMNARE      
+    ## 10  149625          720 E 39TH AV     FRAXINUS   AMERICANA    AUTUMN APPLAUSE
+    ## # ℹ 146,601 more rows
+    ## # ℹ 14 more variables: common_name <chr>, assigned <chr>, root_barrier <chr>,
+    ## #   plant_area <chr>, on_street_block <dbl>, on_street <chr>,
+    ## #   neighbourhood_name <chr>, street_side_name <chr>, height_range_id <dbl>,
+    ## #   diameter <dbl>, curb <chr>, date_planted <date>, longitude <dbl>,
+    ## #   latitude <dbl>
+
+``` r
+if (any(is.na(vancouver_trees))) {
+  cat("NA values exists in the tibble.")
+} else {
+  cat("NA values does not exist in the tibble.")
+}
+```
+
+    ## NA values exists in the tibble.
 
 <!----------------------------------------------------------------------------->
 
@@ -398,6 +431,14 @@ initially most interested in, let’s narrow it down to 1. What lead you
 to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
+
+**Answer for Question1.3:** I would choose vancouver_trees dataset.
+Since although it contains some NA values in some of it’s columns so I
+may need to tidy the dataset, compared to cancer_sample dataset, the
+variable names are easier to interpret. I think this is very essential
+in data analysis.It can help me interpret the relationship betwwen
+variables more easily. Therefore, I think I will choose vancouver_trees
+dataset.
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a final decision! Going back to the
@@ -408,6 +449,10 @@ think of 1 research question that you would want to answer with your
 dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
+
+**Answer for Question 1.4:** In vancouver_trees dataset, the research
+question that I will have is to explore “What is the relationship
+between tree species and their assigned status in the dataset?
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -465,7 +510,7 @@ is dplyr and ggplot2.
 7.  Make a new tibble with a subset of your data, with variables and
     observations that you are interested in exploring.
 8.  Use a density plot to explore any of your variables (that are
-    suitable for this type of plot).
+    suitable for this type of plot).\*\*
 
 2.2 **(4 points)** For each of the 4 exercises that you complete,
 provide a *brief explanation* of why you chose that exercise in relation
@@ -473,6 +518,208 @@ to your data (in other words, why does it make sense to do that?), and
 sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
+
+### Exercise 1: Plot the distribution of a numeric variable
+
+``` r
+#refer to choice 1 above
+
+# Load library
+library(ggplot2)
+library(dplyr)
+
+glimpse(vancouver_trees)
+```
+
+    ## Rows: 146,611
+    ## Columns: 20
+    ## $ tree_id            <dbl> 149556, 149563, 149579, 149590, 149604, 149616, 149…
+    ## $ civic_number       <dbl> 494, 450, 4994, 858, 5032, 585, 4909, 4925, 4969, 7…
+    ## $ std_street         <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
+    ## $ genus_name         <chr> "ULMUS", "ZELKOVA", "STYRAX", "FRAXINUS", "ACER", "…
+    ## $ species_name       <chr> "AMERICANA", "SERRATA", "JAPONICA", "AMERICANA", "C…
+    ## $ cultivar_name      <chr> "BRANDON", NA, NA, "AUTUMN APPLAUSE", NA, "CHANTICL…
+    ## $ common_name        <chr> "BRANDON ELM", "JAPANESE ZELKOVA", "JAPANESE SNOWBE…
+    ## $ assigned           <chr> "N", "N", "N", "Y", "N", "N", "N", "N", "N", "N", "…
+    ## $ root_barrier       <chr> "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "…
+    ## $ plant_area         <chr> "N", "N", "4", "4", "4", "B", "6", "6", "3", "3", "…
+    ## $ on_street_block    <dbl> 400, 400, 4900, 800, 5000, 500, 4900, 4900, 4900, 7…
+    ## $ on_street          <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
+    ## $ neighbourhood_name <chr> "MARPOLE", "MARPOLE", "KENSINGTON-CEDAR COTTAGE", "…
+    ## $ street_side_name   <chr> "EVEN", "EVEN", "EVEN", "EVEN", "EVEN", "ODD", "ODD…
+    ## $ height_range_id    <dbl> 2, 4, 3, 4, 2, 2, 3, 3, 2, 2, 2, 5, 3, 2, 2, 2, 2, …
+    ## $ diameter           <dbl> 10.00, 10.00, 4.00, 18.00, 9.00, 5.00, 15.00, 14.00…
+    ## $ curb               <chr> "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "…
+    ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
+    ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
+    ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
+
+``` r
+# A histogram of Distribution of on_street_block versus the frequency of each street block
+ggplot(vancouver_trees, aes(x = on_street_block )) +
+  geom_histogram(binwidth = 100, fill = "pink", color="black") +
+  #Adding labels on x and y axis
+  labs(title = "Distribution of on_street_block ",
+       x = "On Street Block Number ",
+       y = "Frequency")
+```
+
+![](mini_data_analysis_1_files/figure-gfm/Exercise1_histogram-1.png)<!-- -->
+
+**Brief Explanation for Exercise 1**
+
+The reason I explore the distribution of on_street_block using a
+histogram to view the frequency for each street block is that I would
+like to identifying the street blocks that have a higher concentration
+of trees. This information is valuable for urban planning and the
+possible tree maintenance in the future. For example, in urban planning,
+the tree planting schedule in the street blocks with relatively lower
+distribution of trees might needed to be prioritized.
+
+### Exercise 2: Investigating missing values and generate plot
+
+``` r
+#refer to choice 3 above
+
+# calculate # of missing values for each variable
+missingVal <- vancouver_trees %>%
+  summarise_all(~ sum(is.na(.)))
+
+# set the result to tidy format
+missingValCount <- missingVal %>%
+  #reshape the data frame to a long format
+  pivot_longer(cols = everything(), names_to = "variableName", values_to = "missingCount")
+
+#only include the column with missing value in the x-axis
+missingValFiltered <- missingValCount %>%
+  filter(missingCount > 0)
+
+# A bar chart to visualize the counts of missing values for each variable
+ggplot(missingValFiltered, aes(x=variableName, y = missingCount)) +
+  geom_bar(stat = "identity",fill = "pink", color="black") +
+  labs(title = "Missing Value Counts for Certain Variable",
+       x = "Variable Name",
+       y = "Missing Count")
+```
+
+![](mini_data_analysis_1_files/figure-gfm/Exercise2_missing_values_barchart-1.png)<!-- -->
+
+**Brief Explanation for Exercise 2**
+
+This exercise is very important in data analysis since it will help us
+to identify the quality of the dataset. For example, it can tell us
+which columns has missing values (NA) so that we preprocess the dataset,
+it can tell us we should do corresponding data cleaning or imputation.
+Meanwhile, it can let us know the distribution of missing values for all
+variables and give us a better insights into the column variables where
+incomplete information may exist.
+
+### Exercise 3: Make a new tibble with a subset of the data
+
+``` r
+# refer to choice 7 above
+# create a new tibble with the the following three selected variables
+treeSubset <- vancouver_trees %>%
+  select(genus_name, species_name, assigned)
+
+# group the tibble by genus_name
+treeSummary <- treeSubset %>%
+  group_by(species_name) %>%
+  # add some new variables
+  summarize(
+    numberTrees = n(),
+    assignedCount = sum(assigned == "Y"),
+    unassignedCount = sum(assigned == "N")
+  )
+treeSummary
+```
+
+    ## # A tibble: 283 × 4
+    ##    species_name   numberTrees assignedCount unassignedCount
+    ##    <chr>                <int>         <int>           <int>
+    ##  1 ABIES                  139             6             133
+    ##  2 ACERIFOLIA   X        1724           270            1454
+    ##  3 ACUMINATA                7             0               7
+    ##  4 ACUTISSIMA             526            90             436
+    ##  5 AILANTHIFOLIA            5             1               4
+    ##  6 ALBA                    26             1              25
+    ##  7 ALBA-SINENSIS            3             0               3
+    ##  8 ALNIFOLIA              274            37             237
+    ##  9 ALPINUM                  1             0               1
+    ## 10 ALTISSIMA                4             0               4
+    ## # ℹ 273 more rows
+
+``` r
+# arrange the tibble by number of trees in descending order
+treeSummary <- treeSummary %>%
+  arrange(desc(numberTrees))
+treeSummary
+```
+
+    ## # A tibble: 283 × 4
+    ##    species_name numberTrees assignedCount unassignedCount
+    ##    <chr>              <int>         <int>           <int>
+    ##  1 SERRULATA          13357           776           12581
+    ##  2 CERASIFERA         12031           538           11493
+    ##  3 PLATANOIDES        11963          1225           10738
+    ##  4 RUBRUM              8467          1080            7387
+    ##  5 AMERICANA           5515           631            4884
+    ##  6 SYLVATICA           5285           718            4567
+    ##  7 BETULUS             5195           763            4432
+    ##  8 EUCHLORA   X        4427           579            3848
+    ##  9 FREEMANI   X        4164           506            3658
+    ## 10 CAMPESTRE           3477           353            3124
+    ## # ℹ 273 more rows
+
+**Brief Explanation for Exercise 3**
+
+For this exercise, I created a new tibble containing three column
+variables, “genus_name”, “species_name”, and “assigned”. For the
+research question above, I would like to know “What is the relationship
+between tree species and their assigned status in the dataset.” This is
+the main reason I chose to do this exercise. After creating the new
+tibble, I think I should further look deep into the dataset to see the
+relationships between these variables. Therefore, I group by
+species_name and added some new variables. As a result, the total number
+of trees for each species and the count of trees that are assigned (Y)
+and unassigned (N) can be shown clearly in the treeSummary tibble.This
+is useful and it is relate to my research question. From the result, we
+can clearly know that SERRULATA is the species with the most number of
+trees
+
+### Exercise 4: Density Plot
+
+``` r
+# refer to choice 8 above
+# Create a density plots to explore whether the root barrier will influence the diameter of trees.
+
+# filter the dataset with diameter larger than 0
+filtered_dataset <- vancouver_trees %>%
+  filter(diameter > 0)
+
+# create a density plot
+ggplot(data = filtered_dataset, aes(x = diameter)) +
+  geom_density(aes(fill = root_barrier), alpha = 0.5) +
+  #adjust the size
+  scale_x_log10() +
+  # add title, x and y label to the plot
+  labs(title = "Density of Diameter for Different Root barrier",
+       x = "Diameter of Tree",
+       y = "Desnsity")+
+  theme_minimal()
+```
+
+![](mini_data_analysis_1_files/figure-gfm/Exercise4_density_plot-1.png)<!-- -->
+
+**Brief Explanation for Exercise 4**
+
+The density plot generated in this question might be useful in
+environmental studies. The density plot provides a visual representation
+of how the root barrier will influence the three diameters in the
+dataset. The density lot shows that when the diameter of the three is
+smaller than 10.0, the density of root_barrier (Y) is higher. Whereas
+when the diameter of the three is larger than 10.0, the density of
+root_barrier (N) is higher.
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions
@@ -484,6 +731,19 @@ research question that interested you (Task 1.4). Now it’s time to pick
 Write the 4 questions and any additional comments below.
 
 <!--- *****START HERE***** --->
+
+**Research Question 1:** How does the density of trees vary with the
+corresponding latitude and longitude coordinates in the dataset?
+
+**Research Question 2:** What is the relationship between the diameter
+and their heiht_range_id in the dataset?
+
+**Research Question 3:** Are certain tree species more prevalent in
+specific neighborhoods of Vancouver? In other words, is there any
+relationships between species_name and neighborhood_name?
+
+**Research Question 4:** What is the change of tree population in
+Vancouver changed over time in terms of the type of species?
 <!----------------------------->
 
 # Overall reproducibility/Cleanliness/Coherence Checklist
