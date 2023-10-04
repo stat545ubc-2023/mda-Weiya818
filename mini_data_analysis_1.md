@@ -342,13 +342,12 @@ glimpse(cancer_sample)
 
 ``` r
 if (any(is.na(cancer_sample))) {
-  cat("NA values exists in the tibble.")
-} else {
-  cat("NA values does not exist in the tibble.")
-}
+  print("NA value exists")
+  }else{
+    print("NA value does not exist")}
 ```
 
-    ## NA values does not exist in the tibble.
+    ## [1] "NA value does not exist"
 
 ### Exploration for vancouver_trees dataset:
 
@@ -415,14 +414,13 @@ vancouver_trees
     ## #   latitude <dbl>
 
 ``` r
-if (any(is.na(vancouver_trees))) {
-  cat("NA values exists in the tibble.")
-} else {
-  cat("NA values does not exist in the tibble.")
-}
+if (any(is.na(vancouver_trees))){
+  print("NA value exists")
+  }else{
+    print("NA value does not exist")}
 ```
 
-    ## NA values exists in the tibble.
+    ## [1] "NA value exists"
 
 <!----------------------------------------------------------------------------->
 
