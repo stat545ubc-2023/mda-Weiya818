@@ -11,17 +11,17 @@
     
 ## How to engage in the Project
   * Git clone the github repository to the local R studio
-  * "Knit" the mini_data_analysis_1.Rmd file
+  * _"Knit"_ the mini_data_analysis_1.Rmd file
   * It will generate a mini_data_analysis_1.md file
   * Read through the generated md file that contains all the contents of the Mini Data Analysis Project (M1)
   * The dataset I analyze is called _vancouver_trees_ dataset.
   
 ## Files in the Repository
-  * README.md
+  * **README.md**
     - This is a README file which contains the description as well as the guidelines of this project.
-  * mini_data_analysis_1.Rmd
+  * **mini_data_analysis_1.Rmd**
     - This is the main data analysis Rmd file for this project. This file is mainly for the analyzer.
-  * mini_data_analysis_1.md
-    - This is the generated md file by clicking "knit" button on the Rmd file. This file is visually appealing to look at. If you want to see the results of this data analysis project, please take a look at this file.
-  * mini_data_analysis_1_files
+  * **mini_data_analysis_1.md**
+    - This is the generated md file by clicking _"Knit"_ button on the Rmd file. This file is visually appealing to look at. If you want to see the results of this data analysis project, please take a look at this file.
+  * **mini_data_analysis_1_files**
     - This is the generated png files for data analysis.
