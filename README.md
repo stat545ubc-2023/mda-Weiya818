@@ -9,7 +9,7 @@
  * Generate a reproducible and clear report using R Markdown
  * Become familiar with manipulating and summarizing the data in tibbles using dplyr packages and generate useful graphs for data analysis using ggplot2
     
-## How to engage in the Project
+## How to Engage in the Project
   * Git clone the github repository to the local R studio
   * _"Knit"_ the mini_data_analysis_1.Rmd file
   * It will generate a mini_data_analysis_1.md file
