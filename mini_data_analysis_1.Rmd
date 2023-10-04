@@ -226,13 +226,11 @@ The reason I explore the distribution of on_street_block using a histogram to vi
 missingVal <- vancouver_trees %>%
   summarise_all(~ sum(is.na(.)))
 
-# set the result to tidy format
-missingValCount <- missingVal %>%
-  #reshape the data frame to a long format
-  pivot_longer(cols = everything(), names_to = "variableName", values_to = "missingCount")
+# create a tibble with variable and the missing counts
+missingValTibble <- tibble(variableName = names(missingVal), missingCount = as.integer(as.vector(missingVal)))
 
-#only include the column with missing value in the x-axis
-missingValFiltered <- missingValCount %>%
+# only include the column with missing value in the x-axis
+missingValFiltered <- missingValTibble %>%
   filter(missingCount > 0)
 
 # A bar chart to visualize the counts of missing values for each variable
@@ -241,7 +239,6 @@ ggplot(missingValFiltered, aes(x=variableName, y = missingCount)) +
   labs(title = "Missing Value Counts for Certain Variable",
        x = "Variable Name",
        y = "Missing Count")
-
 ```
 
 **Brief Explanation for Exercise 2**
@@ -255,7 +252,7 @@ This exercise is very important in data analysis since it will help us to identi
 treeSubset <- vancouver_trees %>%
   select(genus_name, species_name, assigned)
 
-# group the tibble by genus_name
+# group the tibble by species_name
 treeSummary <- treeSubset %>%
   group_by(species_name) %>%
   # add some new variables
