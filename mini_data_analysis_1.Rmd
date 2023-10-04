@@ -132,10 +132,9 @@ glimpse(building_permits)
 ### EXPLORE HERE ###
 glimpse(cancer_sample)
 if (any(is.na(cancer_sample))) {
-  cat("NA values exists in the tibble.")
-} else {
-  cat("NA values does not exist in the tibble.")
-}
+  print("NA value exists")
+  }else{
+    print("NA value does not exist")}
 ```
 
 ### Exploration for vancouver_trees dataset:
@@ -147,11 +146,10 @@ if (any(is.na(cancer_sample))) {
 ### EXPLORE HERE ###
 glimpse(vancouver_trees)
 vancouver_trees
-if (any(is.na(vancouver_trees))) {
-  cat("NA values exists in the tibble.")
-} else {
-  cat("NA values does not exist in the tibble.")
-}
+if (any(is.na(vancouver_trees))){
+  print("NA value exists")
+  }else{
+    print("NA value does not exist")}
 ```
 
 <!----------------------------------------------------------------------------->
