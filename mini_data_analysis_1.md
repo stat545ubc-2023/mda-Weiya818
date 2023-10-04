@@ -583,13 +583,11 @@ distribution of trees might needed to be prioritized.
 missingVal <- vancouver_trees %>%
   summarise_all(~ sum(is.na(.)))
 
-# set the result to tidy format
-missingValCount <- missingVal %>%
-  #reshape the data frame to a long format
-  pivot_longer(cols = everything(), names_to = "variableName", values_to = "missingCount")
+# create a tibble with variable and the missing counts
+missingValTibble <- tibble(variableName = names(missingVal), missingCount = as.integer(as.vector(missingVal)))
 
-#only include the column with missing value in the x-axis
-missingValFiltered <- missingValCount %>%
+# only include the column with missing value in the x-axis
+missingValFiltered <- missingValTibble %>%
   filter(missingCount > 0)
 
 # A bar chart to visualize the counts of missing values for each variable
