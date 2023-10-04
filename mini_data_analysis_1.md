@@ -620,7 +620,7 @@ incomplete information may exist.
 treeSubset <- vancouver_trees %>%
   select(genus_name, species_name, assigned)
 
-# group the tibble by genus_name
+# group the tibble by species_name
 treeSummary <- treeSubset %>%
   group_by(species_name) %>%
   # add some new variables
