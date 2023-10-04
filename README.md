@@ -22,4 +22,6 @@
   * mini_data_analysis_1.Rmd
     - This is the main data analysis Rmd file for this project. This file is mainly for the analyzer.
   * mini_data_analysis_1.md
-    - This is the generated md file by clicking "knit" button on the Rmd file. This file is visually appealing to look at. If you want to see the results of this data analysis project, please take a look at this file. 
+    - This is the generated md file by clicking "knit" button on the Rmd file. This file is visually appealing to look at. If you want to see the results of this data analysis project, please take a look at this file.
+  * mini_data_analysis_1_files
+    - This is the generated png files for data analysis.
