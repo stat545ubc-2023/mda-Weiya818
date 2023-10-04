@@ -145,7 +145,13 @@ understand your data.
 
 <!-------------------------- Start your work below ---------------------------->
 
-1: apt_buildings 2: building_permits 3: cancer_sample 4: vancouver_trees
+1: apt_buildings
+
+2: building_permits
+
+3: cancer_sample
+
+4: vancouver_trees
 
 <!----------------------------------------------------------------------------->
 
@@ -162,16 +168,23 @@ comments outside of the code chunk?
 
 <!-------------------------- Start your work below ---------------------------->
 
+### Exploration for apt_buildings dataset:
+
+- **Number of rows and columns (size):** apt_buildings dataset has 3455
+  rows, 37 column variables, which means it is a fairly large dataset.
+- **Data types:** Most columns are of the type character (chr), but
+  there are also some columns with numeric data types (dbl).
+- **Missing values:** Some columns like amenities contains NA values,
+  which indicates we might need to tidy the dataset.
+- **Binary variables:** Some columns like locker_or_storage_room and
+  laundry_room seem to have binary variable type, which means the values
+  of the columns are simply YES or NO.
+- **Categorical variables:** Some columns like heating_type and
+  property_type may represent categorical variables with different
+  levels.
+
 ``` r
 ### EXPLORE HERE ###
-
-#Exploration for apt_buildings dataset:
-#1: Number of rows and columns (size): apt_buildings dataset has 3455 rows, 37 column variables, which means it is a fairly large dataset.
-#2: Data types: Most columns are of the type character (chr), but there are also some columns with numeric data types (dbl).
-#3: Missing values: Some columns like amenities contains NA values, which indicates we might need to tidy the dataset.
-#4: Binary variables: Some columns like locker_or_storage_room and laundry_room seem to have binary variable type, which means the values of the columns are simply YES or NO. 
-#5: Categorical variables: Some columns like heating_type and property_type may represent categorical variables with different levels.    
-
 glimpse(apt_buildings)
 ```
 
@@ -240,14 +253,23 @@ apt_buildings
     ## #   parking_type <chr>, pets_allowed <chr>, prop_management_company_name <chr>,
     ## #   property_type <chr>, rsn <dbl>, separate_gas_meters <chr>, …
 
+### Exploration for building_permits dataset:
+
+- **Number of rows and columns (size):** building_permits dataset has
+  20680 rows, 14 column variables
+- **Data types:** Most columns are of the type character (chr), but
+  there are also some columns with numeric data types (dbl). There is a
+  column “issue_date” is of the type (date), which contains data
+  information.
+- **Missing values:** Some columns like project_description and
+  building_contractor contains NA values, which indicates we might need
+  to tidy the dataset.
+- **Categorical variables:** Some columns like type_of_work may
+  represent categorical variables with different levels. The dataset
+  does not seem to have any binary variables.
+
 ``` r
 ### EXPLORE HERE ###
-
-#Exploration for building_permits dataset:
-#1: Number of rows and columns (size): building_permits dataset has 20680 rows, 14 column variables
-#2: Data types: Most columns are of the type character (chr), but there are also some columns with numeric data types (dbl). There is a column "issue_date" is of the type (date), which contains data information.
-#3: Missing values: Some columns like project_description and building_contractor contains NA values, which indicates we might need to tidy the dataset.
-#4: Categorical variables: Some columns like type_of_work may represent categorical variables with different levels. The dataset does not seem to have any binary variables.
 glimpse(building_permits)
 ```
 
@@ -268,14 +290,18 @@ glimpse(building_permits)
     ## $ year                        <dbl> 2017, 2017, 2017, 2017, 2017, 2017, 2017, …
     ## $ bi_id                       <dbl> 524, 535, 539, 541, 543, 546, 547, 548, 54…
 
+### Exploration for cancer_sample dataset:
+
+- **Number of rows and columns (size):** cancer_sample dataset has 569
+  rows, 32 column variables, compares to the previous dataset, this
+  dataset is fairly smaller.
+- **Data types:** Most the columns are with numeric data types (dbl).
+  There is only one column “diagnosis” is of the type character (chr).
+- **Missing values:** There is no NA value in the cancer_sample dataset,
+  which means this dataset is pretty tidy!
+
 ``` r
 ### EXPLORE HERE ###
-
-#Exploration for cancer_sample dataset:
-#1: Number of rows and columns (size): cancer_sample dataset has 569 rows, 32 column variables, compares to the previous dataset, this dataset is fairly smaller.
-#2: Data types: Most the columns are with numeric data types (dbl). There is only one column "diagnosis" is of the type character (chr).
-#3: Missing values: There is no NA value in the cancer_sample dataset, which means this dataset is pretty tidy!
-
 glimpse(cancer_sample)
 ```
 
@@ -324,13 +350,20 @@ if (any(is.na(cancer_sample))) {
 
     ## NA values does not exist in the tibble.
 
+### Exploration for vancouver_trees dataset:
+
+- **Number of rows and columns (size):** vancouver_trees dataset has
+  146611 rows, 20 column variables, which means it is a very large
+  dataset.
+- **Data types:** Most columns are of the type character (chr), but
+  there are also some columns with numeric data types (dbl). There is a
+  column “date_planted” is of the type (date), which contains date
+  information of when the tree was planted.
+- **Missing values:** Some columns like cultivar_name contains NA
+  values, which indicates we might need to tidy the dataset.
+
 ``` r
 ### EXPLORE HERE ###
-
-#Exploration for vancouver_trees dataset:
-#1: Number of rows and columns (size): vancouver_trees dataset has 146611 rows, 20 column variables, which means it is a very large dataset.
-#2: Data types: Most columns are of the type character (chr), but there are also some columns with numeric data types (dbl). There is a column "date_planted" is of the type (date), which contains date information of when the tree was planted.
-#3: Missing values: Some columns like cultivar_name contains NA values, which indicates we might need to tidy the dataset.
 glimpse(vancouver_trees)
 ```
 
@@ -399,13 +432,13 @@ to choose this one? Briefly explain your choice below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-*Answer for Question1.3: I would choose vancouver_trees dataset. Since
-although it contains some NA values in some of it’s columns so I may
-need to tidy the dataset, compared to cancer_sample dataset, the
+**Answer for Question1.3:** I would choose vancouver_trees dataset.
+Since although it contains some NA values in some of it’s columns so I
+may need to tidy the dataset, compared to cancer_sample dataset, the
 variable names are easier to interpret. I think this is very essential
 in data analysis.It can help me interpret the relationship betwwen
 variables more easily. Therefore, I think I will choose vancouver_trees
-dataset.*
+dataset.
 <!----------------------------------------------------------------------------->
 
 1.4 **(2 points)** Time for a final decision! Going back to the
@@ -417,9 +450,9 @@ dataset. Note it down below.
 
 <!-------------------------- Start your work below ---------------------------->
 
-*Answer for Question 1.4: In vancouver_trees dataset, the research
+**Answer for Question 1.4:** In vancouver_trees dataset, the research
 question that I will have is to explore “What is the relationship
-between tree species and their assigned status in the dataset?*
+between tree species and their assigned status in the dataset?
 <!----------------------------------------------------------------------------->
 
 # Important note
@@ -477,7 +510,7 @@ is dplyr and ggplot2.
 7.  Make a new tibble with a subset of your data, with variables and
     observations that you are interested in exploring.
 8.  Use a density plot to explore any of your variables (that are
-    suitable for this type of plot).
+    suitable for this type of plot).\*\*
 
 2.2 **(4 points)** For each of the 4 exercises that you complete,
 provide a *brief explanation* of why you chose that exercise in relation
@@ -486,12 +519,15 @@ sufficient comments for a reader to understand your reasoning and code.
 
 <!-------------------------- Start your work below ---------------------------->
 
+### Exercise 1: Plot the distribution of a numeric variable
+
 ``` r
+#refer to choice 1 above
+
 # Load library
 library(ggplot2)
 library(dplyr)
 
-###NOTE: Answers for Question 2.1 and Question 2.2 are mixed together, each brief explanation is at the bottom of each exercise.
 glimpse(vancouver_trees)
 ```
 
@@ -519,8 +555,6 @@ glimpse(vancouver_trees)
     ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
 
 ``` r
-# Exercise 1: Plot the distribution of a numeric variable.
-
 # A histogram of Distribution of on_street_block versus the frequency of each street block
 ggplot(vancouver_trees, aes(x = on_street_block )) +
   geom_histogram(binwidth = 100, fill = "pink", color="black") +
@@ -532,18 +566,20 @@ ggplot(vancouver_trees, aes(x = on_street_block )) +
 
 ![](mini_data_analysis_1_files/figure-gfm/Exercise1_histogram-1.png)<!-- -->
 
-``` r
-#'Brief Explanation for Exercise 1: 
-#'The reason I explore the distribution of on_street_block using a histogram to view the frequency for each
-#'street block is that I would like to identifying the street blocks that have a higher concentration of trees.
-#'This information is valuable for urban planning and the possible tree maintenance in the future. 
-#'For example, in urban planning, the tree planting schedule in the street blocks with relatively lower
-#'distribution of trees might needed to be prioritized.
-```
+**Brief Explanation for Exercise 1**
+
+The reason I explore the distribution of on_street_block using a
+histogram to view the frequency for each street block is that I would
+like to identifying the street blocks that have a higher concentration
+of trees. This information is valuable for urban planning and the
+possible tree maintenance in the future. For example, in urban planning,
+the tree planting schedule in the street blocks with relatively lower
+distribution of trees might needed to be prioritized.
+
+### Exercise 2: Investigating missing values and generate plot
 
 ``` r
-# Exercise 2: Investigate how many missing values there are per variable. Can you find a way to plot this?
-# Assuming you've already loaded the necessary libraries (tidyverse)
+#refer to choice 3 above
 
 # calculate # of missing values for each variable
 missingVal <- vancouver_trees %>%
@@ -568,19 +604,20 @@ ggplot(missingValFiltered, aes(x=variableName, y = missingCount)) +
 
 ![](mini_data_analysis_1_files/figure-gfm/Exercise2_missing_values_barchart-1.png)<!-- -->
 
-``` r
-#' Brief Explanation for Exercise 2: 
-#' This exercise is very important in data analysis since it will help us to 
-#' identify the quality of the dataset.
-#' For example, it can tell us which columns has missing values (NA) so that we preprocess the dataset, 
-#' it can tell us we should do corresponding data cleaning or imputation.
-#' Meanwhile, it can let us know the distribution of missing values for all variables and give us 
-#' a better insights into the column variables where incomplete information may exist.
-```
+**Brief Explanation for Exercise 2**
+
+This exercise is very important in data analysis since it will help us
+to identify the quality of the dataset. For example, it can tell us
+which columns has missing values (NA) so that we preprocess the dataset,
+it can tell us we should do corresponding data cleaning or imputation.
+Meanwhile, it can let us know the distribution of missing values for all
+variables and give us a better insights into the column variables where
+incomplete information may exist.
+
+### Exercise 3: Make a new tibble with a subset of the data
 
 ``` r
-# Exercise 3: Make a new tibble with a subset of your data, with variables and observations that you are interested in exploring.
-
+# refer to choice 7 above
 # create a new tibble with the the following three selected variables
 treeSubset <- vancouver_trees %>%
   select(genus_name, species_name, assigned)
@@ -634,24 +671,26 @@ treeSummary
     ## 10 CAMPESTRE           3477           353            3124
     ## # ℹ 273 more rows
 
-``` r
-#' Brief Explanation for Exercise 3: 
-#' For this exercise, I created a new tibble containing three column variables, "genus_name", "species_name", and "assigned".
-#' For the research question above, I would like to know 
-#' "What is the relationship between tree species and their assigned status in the dataset." 
-#' This is the main reason I chose to do this exercise.
-#' After creating the new tibble, I think I should further look deep into the dataset 
-#' to see the relationships between these variables.
-#' Therefore, I group by species_name and added some new variables. 
-#' As a result, the total number of trees for each species and the count of trees 
-#' that are assigned (Y) and unassigned (N) can be shown clearly in the treeSummary tibble.
-#' This is useful and it is relate to my research question.
-#' From the result, we know that SERRULATA is the species with the most number of trees
-```
+**Brief Explanation for Exercise 3**
+
+For this exercise, I created a new tibble containing three column
+variables, “genus_name”, “species_name”, and “assigned”. For the
+research question above, I would like to know “What is the relationship
+between tree species and their assigned status in the dataset.” This is
+the main reason I chose to do this exercise. After creating the new
+tibble, I think I should further look deep into the dataset to see the
+relationships between these variables. Therefore, I group by
+species_name and added some new variables. As a result, the total number
+of trees for each species and the count of trees that are assigned (Y)
+and unassigned (N) can be shown clearly in the treeSummary tibble.This
+is useful and it is relate to my research question. From the result, we
+can clearly know that SERRULATA is the species with the most number of
+trees
+
+### Exercise 4: Density Plot
 
 ``` r
-# Exercise 4: Use a density plot to explore any of your variables (that are suitable for this type of plot).
-
+# refer to choice 8 above
 # Create a density plots to explore whether the root barrier will influence the diameter of trees.
 
 # filter the dataset with diameter larger than 0
@@ -672,14 +711,15 @@ ggplot(data = filtered_dataset, aes(x = diameter)) +
 
 ![](mini_data_analysis_1_files/figure-gfm/Exercise4_density_plot-1.png)<!-- -->
 
-``` r
-#' Brief Explanation for Exercise 4: 
-#' The density plot generated in this question might be useful in environmental studies.
-#' The density plot provides a visual representation of how the root barrier will influence the three diameters in the dataset.
-#' The density lot shows that when the diameter of the three is smaller than 10.0, the density of root_barrier (Y) is higher. 
-#' Whereas when the diameter of the three is larger than 10.0, the density of root_barrier (N) is higher. 
-```
+**Brief Explanation for Exercise 4**
 
+The density plot generated in this question might be useful in
+environmental studies. The density plot provides a visual representation
+of how the root barrier will influence the three diameters in the
+dataset. The density lot shows that when the diameter of the three is
+smaller than 10.0, the density of root_barrier (Y) is higher. Whereas
+when the diameter of the three is larger than 10.0, the density of
+root_barrier (N) is higher.
 <!----------------------------------------------------------------------------->
 
 # Task 3: Choose research questions
@@ -692,18 +732,18 @@ Write the 4 questions and any additional comments below.
 
 <!--- *****START HERE***** --->
 
-Research Question 1: How does the density of trees vary with the
+**Research Question 1:** How does the density of trees vary with the
 corresponding latitude and longitude coordinates in the dataset?
 
-Research Question 2: What is the relationship between the diameter and
-their heiht_range_id in the dataset?
+**Research Question 2:** What is the relationship between the diameter
+and their heiht_range_id in the dataset?
 
-Research Question 3:Are certain tree species more prevalent in specific
-neighborhoods of Vancouver? In other words, is there any relationships
-between species_name and neighborhood_name?
+**Research Question 3:** Are certain tree species more prevalent in
+specific neighborhoods of Vancouver? In other words, is there any
+relationships between species_name and neighborhood_name?
 
-Research Question 4:What is the change of tree population in Vancouver
-changed over time in terms of the type of species?
+**Research Question 4:** What is the change of tree population in
+Vancouver changed over time in terms of the type of species?
 <!----------------------------->
 
 # Overall reproducibility/Cleanliness/Coherence Checklist
