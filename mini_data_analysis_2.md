@@ -540,6 +540,55 @@ untidy? Go through all your columns, or if you have \>8 variables, just
 pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
+
+From the glimpse() function, each row represents a tree observation, and
+each column corresponds to a specific variable.It seems quite tidy from
+thi aspect.
+
+``` r
+glimpse(vancouver_trees)
+```
+
+    ## Rows: 146,611
+    ## Columns: 23
+    ## $ tree_id            <dbl> 149556, 149563, 149579, 149590, 149604, 149616, 149…
+    ## $ civic_number       <dbl> 494, 450, 4994, 858, 5032, 585, 4909, 4925, 4969, 7…
+    ## $ std_street         <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
+    ## $ genus_name         <chr> "ULMUS", "ZELKOVA", "STYRAX", "FRAXINUS", "ACER", "…
+    ## $ species_name       <chr> "AMERICANA", "SERRATA", "JAPONICA", "AMERICANA", "C…
+    ## $ cultivar_name      <chr> "BRANDON", NA, NA, "AUTUMN APPLAUSE", NA, "CHANTICL…
+    ## $ common_name        <chr> "BRANDON ELM", "JAPANESE ZELKOVA", "JAPANESE SNOWBE…
+    ## $ assigned           <chr> "N", "N", "N", "Y", "N", "N", "N", "N", "N", "N", "…
+    ## $ root_barrier       <chr> "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "…
+    ## $ plant_area         <chr> "N", "N", "4", "4", "4", "B", "6", "6", "3", "3", "…
+    ## $ on_street_block    <dbl> 400, 400, 4900, 800, 5000, 500, 4900, 4900, 4900, 7…
+    ## $ on_street          <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
+    ## $ neighbourhood_name <chr> "MARPOLE", "MARPOLE", "KENSINGTON-CEDAR COTTAGE", "…
+    ## $ street_side_name   <chr> "EVEN", "EVEN", "EVEN", "EVEN", "EVEN", "ODD", "ODD…
+    ## $ height_range_id    <dbl> 2, 4, 3, 4, 2, 2, 3, 3, 2, 2, 2, 5, 3, 2, 2, 2, 2, …
+    ## $ diameter           <dbl> 10.00, 10.00, 4.00, 18.00, 9.00, 5.00, 15.00, 14.00…
+    ## $ curb               <chr> "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "…
+    ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
+    ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
+    ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
+    ## $ diameter_size      <chr> "medium", "medium", "small", "medium", "small", "sm…
+    ## $ year_range         <chr> "Before 2000", "Before 2000", "Before 2000", "Befor…
+    ## $ year_planted       <dbl> 1999, 1996, 1993, 1996, 1993, NA, 1993, 1993, 1993,…
+
+However, based on the results, the vancouver_trees dataset contains
+missing values in certain columns, so it is untidy.
+
+``` r
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+
+    ## Missing values exist! The dataset is untidy
+
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (4 points)
@@ -554,6 +603,75 @@ Be sure to explain your reasoning for this task. Show us the “before”
 and “after”.
 
 <!--------------------------- Start your work below --------------------------->
+
+**1.** Since my data is untidy, I will tidy the data. Before the task,
+the dataset is untidy as shown by the prompt message
+
+``` r
+# Check for missing values in the entire dataset
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+
+    ## Missing values exist! The dataset is untidy
+
+``` r
+# check the NA columns
+NA_columns <- vancouver_trees %>%
+  summarise_all(~sum(is.na(.))) %>%
+  as.logical()
+
+# get the variable names with missing values
+names(vancouver_trees)[NA_columns]
+```
+
+    ## [1] "cultivar_name" "plant_area"    "date_planted"  "longitude"    
+    ## [5] "latitude"      "year_planted"
+
+``` r
+#keep a copy of the original untidy daataset
+vancouver_trees_cpy <- vancouver_trees
+
+# remove the rows with missing values in these columns
+vancouver_trees <- vancouver_trees %>%
+  drop_na(cultivar_name, plant_area, date_planted, longitude, latitude, year_planted)
+```
+
+**2.** After tidying the data using tidyr package, check whether there
+is NA values now. It looks great, no missing values found in all
+columns.
+
+``` r
+#check again
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+
+    ## No missing values found!
+
+**3.** Set the dataset back to its original state
+
+``` r
+vancouver_trees <-vancouver_trees_cpy
+#check that the dataset is the original one
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+
+    ## Missing values exist! The dataset is untidy
+
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)
@@ -565,14 +683,33 @@ analysis in the remaining tasks:
 
 <!-------------------------- Start your work below ---------------------------->
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+I pick the Research Question 3 and 4 in Task 1
+
+**1.** Are certain tree species more prevalent in specific neighborhoods
+of Vancouver? In other words, is there any relationships between
+species_name and neighborhood_name?
+
+**2.** What is the change of tree population in Vancouver changed over
+time? In other words, the change of amount of the tree planted each
+year.
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
+
+**1.** As described before, this research question achieved interesting
+results. There relationship between species_name and neighbourhood_name
+exists. I think further possible analysis can be what is the most
+popular tree species in the whole Vancouver area?
+
+**2.** This research question is meaningful in terms of urban planning
+since the decrease in the amount of trees planted each year tells us
+that more trees definitely need to be planted in the future. Further
+analysis can discover whether there has been a decrease in planting some
+specific kinds of trees over these years. What are some possible reasons
+for that?
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be
@@ -581,7 +718,221 @@ that we’ve covered so far (i.e. by filtering, cleaning, tidy’ing,
 dropping irrelevant columns, etc.).
 
 (If it makes more sense, then you can make/pick two versions of your
-data, one for each research question.)
+data, one for each research question.) **1.** The suitable data is
+species_in_neighborhood dataset that I created in Task 1. From the
+results generated below, SERRULATA has a count of 13357, which is the
+most popular tree species in Vancouver, followed by CERASIFERA and
+PLATANOIDES, which has 12031 and 11963 planted trees respectively.
+
+``` r
+# calculate the total amount of each species in Vancouver area
+glimpse(species_in_neighborhood)
+```
+
+    ## Rows: 3,056
+    ## Columns: 5
+    ## $ neighbourhood_name <chr> "ARBUTUS-RIDGE", "ARBUTUS-RIDGE", "ARBUTUS-RIDGE", …
+    ## $ species_name       <chr> "ABIES", "ACERIFOLIA   X", "ACUTISSIMA", "ALNIFOLIA…
+    ## $ n                  <int> 2, 103, 5, 16, 225, 3, 19, 4, 16, 15, 2, 1, 135, 2,…
+    ## $ total_count        <int> 5169, 5169, 5169, 5169, 5169, 5169, 5169, 5169, 516…
+    ## $ proportion         <dbl> 0.0003869220, 0.0199264848, 0.0009673051, 0.0030953…
+
+``` r
+overall_species_counts <- species_in_neighborhood %>%
+  group_by(species_name) %>%
+  summarize(total_count = sum(n)) %>%
+  arrange(desc(total_count)) %>%
+  ungroup()
+
+print(overall_species_counts)
+```
+
+    ## # A tibble: 283 × 2
+    ##     species_name     total_count
+    ##     <chr>                  <int>
+    ##   1 SERRULATA              13357
+    ##   2 CERASIFERA             12031
+    ##   3 PLATANOIDES            11963
+    ##   4 RUBRUM                  8467
+    ##   5 AMERICANA               5515
+    ##   6 SYLVATICA               5285
+    ##   7 BETULUS                 5195
+    ##   8 EUCHLORA   X            4427
+    ##   9 FREEMANI   X            4164
+    ##  10 CAMPESTRE               3477
+    ##  11 KOBUS                   2691
+    ##  12 X YEDOENSIS             2462
+    ##  13 HIPPOCASTANUM           2277
+    ##  14 CALLERYANA              2194
+    ##  15 PSEUDOPLATANUS          2091
+    ##  16 JAPONICUM               2078
+    ##  17 PERSICA                 1969
+    ##  18 TRUNCATUM               1918
+    ##  19 JAPONICA                1743
+    ##  20 ACERIFOLIA   X          1724
+    ##  21 STYRACIFLUA             1697
+    ##  22 FLORIBUNDA              1689
+    ##  23 XX                      1669
+    ##  24 TRIACANTHOS             1615
+    ##  25 PALUSTRIS               1613
+    ##  26 ZUMI                    1613
+    ##  27 PENNSYLVANICA           1612
+    ##  28 ROBUR                   1521
+    ##  29 SPECIES                 1449
+    ##  30 RUBRA                   1419
+    ##  31 ORNUS                   1360
+    ##  32 PENDULA                 1354
+    ##  33 LAVALLEI  X             1346
+    ##  34 RETICULATA              1294
+    ##  35 CORDATA                 1146
+    ##  36 PLICATA                 1123
+    ##  37 EXCELSIOR               1117
+    ##  38 PALMATUM                1037
+    ##  39 KOUSA                   1030
+    ##  40 OXYCARPA                 911
+    ##  41 TULIPIFERA               817
+    ##  42 OXYACANTHA               783
+    ##  43 MENZIESII                742
+    ##  44 SARGENTII                723
+    ##  45 MORDENSIS                683
+    ##  46 AVIUM                    657
+    ##  47 AUCUPARIA                612
+    ##  48 ARIA                     606
+    ##  49 PSEUDOACACIA             572
+    ##  50 ACUTISSIMA               526
+    ##  51 GRISEUM                  510
+    ##  52 NUTTALLII                492
+    ##  53 CANADENSIS               476
+    ##  54 PHAENOPYRUM              465
+    ##  55 PUMILA                   465
+    ##  56 NIGRA                    437
+    ##  57 VIRGINIANA               423
+    ##  58 CAROLINIANA              418
+    ##  59 CAPPADOCICUM             417
+    ##  60 LAWSONIANA               417
+    ##  61 GLYPTOSTROBOIDES         398
+    ##  62 MACROPHYLLUM             398
+    ##  63 OCCIDENTALIS             394
+    ##  64 BIGNONIOIDES             381
+    ##  65 COCCINEA                 351
+    ##  66 SERRATA                  347
+    ##  67 SACCHARINUM              328
+    ##  68 PHELLOS                  316
+    ##  69 SALICINA                 301
+    ##  70 SUBHIRTELLA              298
+    ##  71 GLABRA                   277
+    ##  72 GINNALA                  276
+    ##  73 ALNIFOLIA                274
+    ##  74 CRUS-GALLI               259
+    ##  75 PSEUDOCAMELLIA           259
+    ##  76 DEODARA                  246
+    ##  77 CARNEA   X               245
+    ##  78 BILOBA                   242
+    ##  79 SYLVESTRIS               237
+    ##  80 DOUGLASII                205
+    ##  81 SYRIACA                  191
+    ##  82 NEGUNDO                  184
+    ##  83 CHINENSE                 182
+    ##  84 INVOLUCRATA              177
+    ##  85 NOOTKATENSIS             158
+    ##  86 GRANDIFLORA X            156
+    ##  87 AQUIFOLIUM               155
+    ##  88 VELUTINA                 154
+    ##  89 FLORIDA                  145
+    ##  90 ABIES                    139
+    ##  91 PAPYRIFERA               139
+    ##  92 GIGANTEUM                134
+    ##  93 EUROPAEA   X             133
+    ##  94 HETEROPHYLLA             121
+    ##  95 SACCHARUM                116
+    ##  96 CONTORTA                 114
+    ##  97 KEWENSIS X               113
+    ##  98 PUNGENS                  109
+    ##  99 GRANDIS                  107
+    ## 100 BACCATA                  103
+    ## # ℹ 183 more rows
+
+**2.** The suitable dataset is vancouver_trees since I need to use the
+generated column year_planted and the species_name in the original
+dataset. As the results shown, over the period of 2013 and 2019, it
+seems like the popular tree species,SERRULATA and CERASIFERA have a
+decrease in planting as well as the RUBRUM. It may relate to some shifts
+and changes in urban plannings or the change in climate factors.
+
+``` r
+# filter the dataset to select year between 2013 and 2019
+vancouver_trees_filter <- vancouver_trees %>%
+  filter(year_planted >= 2013, year_planted <= 2019)
+
+
+species_counts <- vancouver_trees_filter %>%
+  # group by the species and year 
+  group_by(species_name, year_planted) %>%
+  # count the number of trees planted
+  summarize(total_tree = n()) %>%
+  ungroup()
+```
+
+    ## `summarise()` has grouped output by 'species_name'. You can override using the
+    ## `.groups` argument.
+
+``` r
+# create separate columns for each year
+wide_version <- species_counts %>%
+  pivot_wider(names_from = year_planted, values_from = total_tree)
+
+# calculate the difference between 2013 and 2019
+wide_version <- wide_version %>%
+  mutate(drop_amount = `2019` - `2013`)
+
+# select those species that decrease
+decrease_species <- wide_version %>%
+  filter(drop_amount < 0) %>%
+  select(species_name, drop_amount)
+
+# show results starting from the species that drops the most
+decrease_species <- decrease_species %>%
+  arrange(drop_amount)
+
+decrease_species
+```
+
+    ## # A tibble: 33 × 2
+    ##    species_name   drop_amount
+    ##    <chr>                <int>
+    ##  1 CERASIFERA            -229
+    ##  2 RUBRUM                -190
+    ##  3 SERRULATA             -157
+    ##  4 XX                    -139
+    ##  5 PERSICA               -115
+    ##  6 RETICULATA            -112
+    ##  7 SYLVATICA              -99
+    ##  8 PALMATUM               -96
+    ##  9 PLATANOIDES            -95
+    ## 10 TRUNCATUM              -93
+    ## 11 FREEMANI   X           -76
+    ## 12 JAPONICUM              -69
+    ## 13 KOUSA                  -68
+    ## 14 X YEDOENSIS            -66
+    ## 15 CANADENSIS             -63
+    ## 16 LAVALLEI  X            -60
+    ## 17 GRANDIFLORA X          -58
+    ## 18 AMERICANA              -45
+    ## 19 CAMPESTRE              -42
+    ## 20 MORDENSIS              -31
+    ## 21 JAPONICA               -28
+    ## 22 PSEUDOCAMELLIA         -28
+    ## 23 GRISEUM                -27
+    ## 24 KOBUS                  -25
+    ## 25 TRIACANTHOS            -25
+    ## 26 PALUSTRIS              -22
+    ## 27 SARGENTII              -17
+    ## 28 CALLERYANA             -16
+    ## 29 OCCIDENTALIS           -16
+    ## 30 ZUMI                   -15
+    ## 31 SERRATA                -14
+    ## 32 CARNEA   X              -9
+    ## 33 EUCHLORA   X            -2
 
 <!--------------------------- Start your work below --------------------------->
 

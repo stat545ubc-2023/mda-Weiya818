@@ -282,6 +282,19 @@ A reminder of the definition of *tidy* data:
 Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have \>8 variables, just pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
+From the glimpse() function, each row represents a tree observation, and each column corresponds to a specific variable.It seems quite tidy from thi aspect.
+```{r}
+glimpse(vancouver_trees)
+```
+However, based on the results, the vancouver_trees dataset contains missing values in certain columns, so it is untidy.
+```{r}
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -295,6 +308,56 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 
 <!--------------------------- Start your work below --------------------------->
 
+**1.** Since my data is untidy, I will tidy the data. Before the task, the dataset is untidy as shown by the prompt message
+```{r}
+# Check for missing values in the entire dataset
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+
+```{r}
+# check the NA columns
+NA_columns <- vancouver_trees %>%
+  summarise_all(~sum(is.na(.))) %>%
+  as.logical()
+
+# get the variable names with missing values
+names(vancouver_trees)[NA_columns]
+
+#keep a copy of the original untidy daataset
+vancouver_trees_cpy <- vancouver_trees
+
+# remove the rows with missing values in these columns
+vancouver_trees <- vancouver_trees %>%
+  drop_na(cultivar_name, plant_area, date_planted, longitude, latitude, year_planted)
+```
+**2.** After tidying the data using tidyr package, check whether there is NA values now. It looks great, no missing values found in all columns.
+```{r}
+#check again
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+**3.** Set the dataset back to its original state
+```{r}
+vancouver_trees <-vancouver_trees_cpy
+#check that the dataset is the original one
+missing_value <- sum(is.na(vancouver_trees))
+if (missing_value > 0) {
+  cat("Missing values exist! The dataset is untidy")
+} else {
+  cat("No missing values found!")
+}
+```
+
+
 <!----------------------------------------------------------------------------->
 
 ### 2.3 (4 points)
@@ -302,22 +365,76 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 Now, you should be more familiar with your data, and also have made progress in answering your research questions. Based on your interest, and your analyses, pick 2 of the 4 research questions to continue your analysis in the remaining tasks:
 
 <!-------------------------- Start your work below ---------------------------->
+I pick the Research Question 3 and 4 in Task 1
 
-1.  *FILL_THIS_IN*
-2.  *FILL_THIS_IN*
+**1.** Are certain tree species more prevalent in
+specific neighborhoods of Vancouver? In other words, is there any
+relationships between species_name and neighborhood_name?
+
+**2.** What is the change of tree population in
+Vancouver changed over time? In other words, the change of amount of the tree planted each year.
 
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
+**1.** As described before, this research question achieved interesting results. There relationship between species_name and neighbourhood_name exists. I think further possible analysis can be what is the most popular tree species in the whole Vancouver area?
 
+**2.** This research question is meaningful in terms of urban planning since the decrease in the amount of trees planted each year tells us that more trees definitely need to be planted in the future. Further analysis can discover whether there has been a decrease in planting some specific kinds of trees over these years. What are some possible reasons for that?
 <!----------------------------------------------------------------------------->
 
 Now, try to choose a version of your data that you think will be appropriate to answer these 2 questions. Use between 4 and 8 functions that we've covered so far (i.e. by filtering, cleaning, tidy'ing, dropping irrelevant columns, etc.).
 
 (If it makes more sense, then you can make/pick two versions of your data, one for each research question.) 
+**1.** The suitable data is species_in_neighborhood dataset that I created in Task 1. From the results generated below, SERRULATA has a count of 13357, which is the most popular tree species in Vancouver, followed by CERASIFERA and PLATANOIDES, which has 12031 and 11963 planted trees respectively.
+```{r}
+# calculate the total amount of each species in Vancouver area
+glimpse(species_in_neighborhood)
+overall_species_counts <- species_in_neighborhood %>%
+  group_by(species_name) %>%
+  summarize(total_count = sum(n)) %>%
+  arrange(desc(total_count)) %>%
+  ungroup()
 
+print(overall_species_counts)
+```
+
+**2.** The suitable dataset is vancouver_trees since I need to use the generated column year_planted and the species_name in the original dataset. As the results shown, over the period of 2013 and 2019, it seems like the popular tree species,SERRULATA and CERASIFERA have a decrease in planting as well as the RUBRUM. It may relate to some shifts and changes in urban plannings or the change in climate factors.
+
+```{r}
+# filter the dataset to select year between 2013 and 2019
+vancouver_trees_filter <- vancouver_trees %>%
+  filter(year_planted >= 2013, year_planted <= 2019)
+
+
+species_counts <- vancouver_trees_filter %>%
+  # group by the species and year 
+  group_by(species_name, year_planted) %>%
+  # count the number of trees planted
+  summarize(total_tree = n()) %>%
+  ungroup()
+
+# create separate columns for each year
+wide_version <- species_counts %>%
+  pivot_wider(names_from = year_planted, values_from = total_tree)
+
+# calculate the difference between 2013 and 2019
+wide_version <- wide_version %>%
+  mutate(drop_amount = `2019` - `2013`)
+
+# select those species that decrease
+decrease_species <- wide_version %>%
+  filter(drop_amount < 0) %>%
+  select(species_name, drop_amount)
+
+# show results starting from the species that drops the most
+decrease_species <- decrease_species %>%
+  arrange(drop_amount)
+
+decrease_species
+
+```
 <!--------------------------- Start your work below --------------------------->
 
 # Task 3: Modelling
