@@ -264,7 +264,7 @@ the alpha transparency.
 filtered_dataset <- vancouver_trees %>%
   filter(diameter > 0)
 
-# Create a density plot for diameter versus height_range_id
+# create a density plot for diameter versus height_range_id
 ggplot(data = filtered_dataset, aes(x = diameter)) +
   geom_density(aes(fill = factor(height_range_id)), alpha = 0.5) +
   scale_x_log10() +
@@ -309,6 +309,7 @@ head(species_in_neighborhood)
 ``` r
 most_popular_species <- species_in_neighborhood %>%
   group_by(neighbourhood_name) %>%
+  # get the most popular species
   slice_max(order_by = proportion)
 
  # in order to see the full tibble
@@ -412,6 +413,7 @@ glimpse(vancouver_trees)
 
 ``` r
 vancouver_trees <-vancouver_trees %>%
+  #create a new col year_planted through the data variable
   mutate(year_planted = year(date_planted))
 
 # group the data by year 
@@ -465,17 +467,18 @@ planted over years, x-axes is made logarithmic(year), and format the
 axes labels.
 
 ``` r
-# Create a line plot to visualize the change in total tree population over years
+# visualize the change in the amount of trees over years
 ggplot(tree_counts_by_year, aes(x = year_planted, y = total_tree_count)) +
   geom_line() +
-  scale_y_log10() +  # Set the y-axis to be logarithmic
+  # Set the y-axis to be logarithmic
+  scale_y_log10() + 
   labs(
     title = "Change in Total Tree Population Over Time",
     x = "Year",
     y = "Total Number of Trees Planted"
   ) +
   theme_minimal() +
-  scale_x_continuous(labels = scales::comma)  # Format x-axis labels
+  scale_x_continuous(labels = scales::comma)
 ```
 
     ## Warning: Removed 1 row containing missing values (`geom_line()`).
@@ -608,7 +611,7 @@ and “after”.
 the dataset is untidy as shown by the prompt message
 
 ``` r
-# Check for missing values in the entire dataset
+# check for missing values in the entire dataset
 missing_value <- sum(is.na(vancouver_trees))
 if (missing_value > 0) {
   cat("Missing values exist! The dataset is untidy")
@@ -718,11 +721,13 @@ that we’ve covered so far (i.e. by filtering, cleaning, tidy’ing,
 dropping irrelevant columns, etc.).
 
 (If it makes more sense, then you can make/pick two versions of your
-data, one for each research question.) **1.** The suitable data is
-species_in_neighborhood dataset that I created in Task 1. From the
-results generated below, SERRULATA has a count of 13357, which is the
-most popular tree species in Vancouver, followed by CERASIFERA and
-PLATANOIDES, which has 12031 and 11963 planted trees respectively.
+data, one for each research question.)
+
+**1.** The suitable data is species_in_neighborhood dataset that I
+created in Task 1. From the results generated below, SERRULATA has a
+count of 13357, which is the most popular tree species in Vancouver,
+followed by CERASIFERA and PLATANOIDES, which has 12031 and 11963
+planted trees respectively.
 
 ``` r
 # calculate the total amount of each species in Vancouver area
