@@ -746,20 +746,38 @@ glimpse(vancouver_trees)
     ## $ year_range         <chr> "Before 2000", "Before 2000", "Before 2000", "Befor…
     ## $ year_planted       <dbl> 1999, 1996, 1993, 1996, 1993, NA, 1993, 1993, 1993,…
 
-However, based on the results, the vancouver_trees dataset contains
-missing values in certain columns if we track it with is.na() function,
-so it is untidy.
+Now, I select 8 columns from the vancouver_trees dataset.
 
 ``` r
-missing_value <- sum(is.na(vancouver_trees))
-if (missing_value > 0) {
-  cat("Missing values exist! The dataset is untidy")
+selected_data<- vancouver_trees %>% select(date_planted, plant_area, longitude, height_range_id, latitude , neighbourhood_name, diameter, species_name)
+glimpse(selected_data)
+```
+
+    ## Rows: 146,611
+    ## Columns: 8
+    ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
+    ## $ plant_area         <chr> "N", "N", "4", "4", "4", "B", "6", "6", "3", "3", "…
+    ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
+    ## $ height_range_id    <dbl> 2, 4, 3, 4, 2, 2, 3, 3, 2, 2, 2, 5, 3, 2, 2, 2, 2, …
+    ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
+    ## $ neighbourhood_name <chr> "MARPOLE", "MARPOLE", "KENSINGTON-CEDAR COTTAGE", "…
+    ## $ diameter           <dbl> 10.00, 10.00, 4.00, 18.00, 9.00, 5.00, 15.00, 14.00…
+    ## $ species_name       <chr> "AMERICANA", "SERRATA", "JAPONICA", "AMERICANA", "C…
+
+However, based on the results, the seelcted dataset contains missing
+values in certain columns if we track it with is.na() function, so it is
+untidy.
+
+``` r
+missing_count <- sum(is.na(selected_data))
+if (missing_count > 0) {
+  cat("Untidy! It contains NA value!")
 } else {
-  cat("No missing values found!")
+  cat("No NA value detect!")
 }
 ```
 
-    ## Missing values exist! The dataset is untidy
+    ## Untidy! It contains NA value!
 
 <!----------------------------------------------------------------------------->
 
@@ -776,41 +794,40 @@ and “after”.
 
 <!--------------------------- Start your work below --------------------------->
 
-**1.** Since my data is untidy, I will tidy the data. Before the task,
-the dataset is untidy as shown by the prompt message
+**1.** Since the selcted dataset is untidy, I will tidy the data. Before
+the task, the dataset is untidy as shown by the prompt message
 
 ``` r
 # check for missing values in the entire dataset
-missing_value <- sum(is.na(vancouver_trees))
-if (missing_value > 0) {
-  cat("Missing values exist! The dataset is untidy")
+missing_count <- sum(is.na(selected_data))
+if (missing_count > 0) {
+  cat("Untidy! It contains NA value!")
 } else {
-  cat("No missing values found!")
+  cat("No NA value detect!")
 }
 ```
 
-    ## Missing values exist! The dataset is untidy
+    ## Untidy! It contains NA value!
 
 ``` r
 # check the NA columns
-NA_columns <- vancouver_trees %>%
+missing_val_col <- selected_data %>%
   summarise_all(~sum(is.na(.))) %>%
   as.logical()
 
 # get the variable names with missing values
-names(vancouver_trees)[NA_columns]
+names(selected_data)[missing_val_col]
 ```
 
-    ## [1] "cultivar_name" "plant_area"    "date_planted"  "longitude"    
-    ## [5] "latitude"      "year_planted"
+    ## [1] "date_planted" "plant_area"   "longitude"    "latitude"
 
 ``` r
 #keep a copy of the original untidy daataset
-vancouver_trees_cpy <- vancouver_trees
+selected_data_cpy <- selected_data
 
 # remove the rows with missing values in these columns
-vancouver_trees <- vancouver_trees %>%
-  drop_na(cultivar_name, plant_area, date_planted, longitude, latitude, year_planted)
+selected_data <- selected_data %>%
+  drop_na(plant_area, date_planted, longitude, latitude)
 ```
 
 **2.** After tidying the data using tidyr package, check whether there
@@ -819,30 +836,30 @@ columns.
 
 ``` r
 #check again
-missing_value <- sum(is.na(vancouver_trees))
-if (missing_value > 0) {
-  cat("Missing values exist! The dataset is untidy")
+missing_count <- sum(is.na(selected_data))
+if (missing_count > 0) {
+  cat("Untidy! It contains NA value!")
 } else {
-  cat("No missing values found!")
+  cat("No NA value detect!")
 }
 ```
 
-    ## No missing values found!
+    ## No NA value detect!
 
 **3.** Set the dataset back to its original state
 
 ``` r
-vancouver_trees <-vancouver_trees_cpy
+selected_data <-selected_data_cpy
 #check that the dataset is the original one
-missing_value <- sum(is.na(vancouver_trees))
-if (missing_value > 0) {
-  cat("Missing values exist! The dataset is untidy")
+missing_count <- sum(is.na(selected_data))
+if (missing_count > 0) {
+  cat("Untidy! It contains NA value!")
 } else {
-  cat("No missing values found!")
+  cat("No NA value detect!")
 }
 ```
 
-    ## Missing values exist! The dataset is untidy
+    ## Untidy! It contains NA value!
 
 <!----------------------------------------------------------------------------->
 
