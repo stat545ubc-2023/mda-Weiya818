@@ -108,13 +108,13 @@ diameter_summary<- vancouver_trees %>%
   group_by(height_range_id) %>%
   summarize(
     # compute range
-    d_range = diff(range(diameter)),
+    d_range = diff(range(diameter, na.rm = TRUE)),
     # compute mean
-    d_mean = mean(diameter),
+    d_mean = mean(diameter, na.rm = TRUE),
     # compute median
-    d_median = median(diameter),
+    d_median = median(diameter, na.rm = TRUE),
     #compute std
-    d_std = sd(diameter)
+    d_std = sd(diameter, na.rm = TRUE)
   )
 print(diameter_summary)
 ```
@@ -570,10 +570,10 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 <!-------------------------- Start your work below ---------------------------->
 ```{r}
 # write diameter_model from Task 3 to an R binary file
-saveRDS(diameter_model, "output/diameter_model.rds")
+saveRDS(diameter_model, here("output/diameter_model.rds"))
 
 # load the model
-diameter_model <- readRDS("output/diameter_model.rds")
+diameter_model <- readRDS(here("output/diameter_model.rds"))
 ```
 <!----------------------------------------------------------------------------->
 
