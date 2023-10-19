@@ -40,3 +40,7 @@
     - This is the generated png files for data analysis in M1
   * **mini_data_analysis_2_files**
     - This is the generated png files for data analysis in M2
+  * **diameter_model.rds**
+    - A RDS file for the model object from Task 3 in M2
+  * **most_popular_species.csv**
+    - A CSV file for _most_popular_species_ summary table from Task 1 in M1
