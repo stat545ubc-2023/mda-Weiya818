@@ -56,18 +56,14 @@ From milestone 1, you should have an idea of the basic structure of your dataset
 First, write out the 4 research questions you defined in milestone 1 were. This will guide your work through milestone 2:
 
 <!-------------------------- Start your work below ---------------------------->
-**Research Question 1:** How does the diameter of trees vary with the
-corresponding latitude or longitude coordinates in the dataset?
+**Research Question 1:** What is the relationship between the diameter and their height_range_id in the dataset?
 
-**Research Question 2:** What is the relationship between the diameter
-and their height_range_id in the dataset?
+**Research Question 2:** Are certain tree species more prevalent in specific neighborhoods of Vancouver? In other words, are there any relationships between species_name and neighborhood_name?
 
-**Research Question 3:** Are certain tree species more prevalent in
-specific neighborhoods of Vancouver? In other words, is there any
-relationships between species_name and neighborhood_name?
+**Research Question 3:** What is the change of tree population in Vancouver changed over time? In other words, the change in the amount of trees planted each year. (Here, I added a sentence to make the research question more clear to understand.)
 
-**Research Question 4:** What is the change of tree population in
-Vancouver changed over time? In other words, the change of amount of the tree planted each year.
+**Research Question 4:** What is a change in the tree density of the top 5 most popular tree species in the DOWNTOWN area from 2013 to 2019? 
+(This is a newly added question to replace the original research question 1, which is "How does the diameter of trees vary with the corresponding latitude or longitude coordinates in the dataset?" The generated scatter plot of the original Research Question 1 does not seem to yield pretty useful results in terms of the relationship between tree diameter and the corresponding latitude or longitude. Based on the generated graphs, there is no obvious sign that certain longitude or latitude will largely affect the diameter of the trees.)
 <!----------------------------------------------------------------------------->
 
 Here, we will investigate your data using various data manipulation and graphing functions.
@@ -100,92 +96,69 @@ Using variables and/or tables you made in one of the "Summarizing" tasks:
 Make sure it's clear what research question you are doing each operation for!
 
 <!------------------------- Start your work below ----------------------------->
-**Research Question 1:** How does the diameter of trees vary with the
-corresponding latitude or longitude coordinates in the dataset?
 
-**Task1** _(summarizing)_
-Create a categorical variable diameter size with 4 groups (small, medium, large, other) from an existing numerical variable.
-
-```{r}
-vancouver_trees <- vancouver_trees %>%
-  mutate(diameter_size = case_when(
-    diameter < 10 ~ "small", 
-    between(diameter, 10, 20) ~ "medium", 
-    diameter > 20 ~ "large",
-    TRUE ~ "other" 
-  ))
-glimpse(vancouver_trees)
-```
-
-**Task2** _(graphing)_
-Create a graph where one of the axes is logarithmic, and format the axis labels to be "pretty." 
-Create a scatter plot of tree diameter (y-axis) against latitude (x-axis) and a scatter plot of tree diameter (y-axis) against longitude (x-axis).
-
-```{r}
-ggplot(vancouver_trees, aes(x = latitude, y = diameter)) +
-  geom_point() +
-  labs(x = "latitude", y = "diameter") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(vancouver_trees, aes(x = longitude, y = diameter)) +
-  geom_point() +
-  labs(x = "longitude", y = "diameter") +
-  theme_minimal()
-```
-
-**Research Question 2:** What is the relationship between the diameter
+**Research Question 1:** What is the relationship between the diameter
 and their height_range_id in the dataset?
 
-**Task1** _(summarizing)_
- Compute the *range*, *mean*, and *two other summary statistics* of diameter across the groups of height_range_id from the data.
+**Option1 (summarizing)**
+I compute the *range*, *mean*, and *median* and *std* of the diameter across the groups of height_range_id from the data. Based on the diameter_summary tibble, it seems there is a positive relationship between height_range_id and diameter_mean and diameter_median. This information indicates that a tree with a larger height_range_id tends to have a larger diameter.
+
 ```{r}
-data_summary<- vancouver_trees %>%
+diameter_summary<- vancouver_trees %>%
   group_by(height_range_id) %>%
   summarize(
+    # compute range
     d_range = diff(range(diameter)),
+    # compute mean
     d_mean = mean(diameter),
+    # compute median
     d_median = median(diameter),
+    #compute std
     d_std = sd(diameter)
   )
-print(data_summary)
+print(diameter_summary)
 ```
 
-**Task2** _(graphing)_
-Make a graph where it makes sense to customize the alpha transparency.
+**Option7 (graphing)**
+I graphed a density plot for diameter versus height_range_id, the different height_range_id are shown as fills. The alpha value is customed to be 0.5 since the transparency matters here. Based on the density plot generated below, we can see a clear relationship between the density and diameter of the trees as well as the height_range_id. It seems like for most cases, as the tree diameter increases, the density of the tree increases as well. Meanwhile, it seems like there is also a positive relationship between the tree diameter and the height_range_id. When the tree diameter is larger, the corresponding height_range_id is also larger. I compute the *range*, *mean*, and *median* and *std* of the diameter across the groups of height_range_id from the data. Based on the diameter_summary tibble, it seems there is a positive relationship between height_range_id and diameter_mean and diameter_median. This information indicates that a tree with a larger height_range_id tends to have a larger diameter.
+
 ```{r}
 filtered_dataset <- vancouver_trees %>%
+  # filter out the diameter > 0
   filter(diameter > 0)
 
 # create a density plot for diameter versus height_range_id
 ggplot(data = filtered_dataset, aes(x = diameter)) +
+  # customized the alpha value
   geom_density(aes(fill = factor(height_range_id)), alpha = 0.5) +
-  scale_x_log10() +
   labs(
-    title = "Density of diameter for different height range",
+    title = "Density of diameter for different height range id",
     x = "Tree diameter",
     y = "Density"
-  ) +
-  theme_minimal()
+  ) + scale_x_log10() + theme_minimal()
 ```
 
-**Research Question 3:** Are certain tree species more prevalent in
-specific neighborhoods of Vancouver? In other words, is there any
-relationships between species_name and neighborhood_name?
+**Research Question 2:** Are certain tree species more prevalent in specific neighborhoods of Vancouver? In other words, are there any relationships between species_name and neighborhood_name?
 
-**Task1** _(summarizing)_
-Compute the proportion and counts in each category of neighbourhood_name across the groups of species_name from the dataset
+**Option4 (summarizing)**
+I compute the proportion and total_counts in each category of neighbourhood_name across the groups of species_name from the dataset in a tibble called species_in_neighborhood. With this tibble, I know the total and proportion of each species in the corresponding neighborhood, which is useful for the analysis of my research question.
 
 ```{r}
 species_in_neighborhood <- vancouver_trees %>%
   count(neighbourhood_name, species_name) %>%
   group_by(neighbourhood_name) %>%
+  # add column total_count and proportion
   mutate(total_count = sum(n),proportion = n / total_count) %>%
+  # set tibble to original state
   ungroup()
 
 head(species_in_neighborhood)
+```
 
+**Option6 (graphing)**
+I get the most popular species from the above tibble. Then I create a graph of the most prevalent tree species in each neighborhood, x-axis is the proportion and is made logarithmic, y-axis is the neighborhood name. Species_name is the fill. Based on the plot generated, it seems like DOWNTOWN has obvious favors over Rubrum, as well as the FAIRVIEW. STRATHCONA seems to be the only neighborhood that favors the SYLVATICA. PLATANOIDES and SERRULATA seem to be the favorite tree species for most neighborhood districts.
+
+```{r}
 most_popular_species <- species_in_neighborhood %>%
   group_by(neighbourhood_name) %>%
   # get the most popular species
@@ -195,26 +168,26 @@ most_popular_species <- species_in_neighborhood %>%
 options(dplyr.print_min = 100) 
 print(most_popular_species)
 
-```
-
-**Task2** _(graphing)_
-Create a graph of the most prevalent tree species in each neighborhood , made x-axis logarithmic, and formatted the axes labels 
-```{r}
-ggplot(most_popular_species, aes(x = proportion, y = reorder(neighbourhood_name, -proportion), fill = species_name)) +
+ggplot(most_popular_species, aes(x = proportion, y = reorder(neighbourhood_name, -proportion), fill = species_name))+
   geom_bar(stat = "identity") +
-  theme_minimal() +
   labs(
     title = "Most Prevalent Tree Species in Each Neighborhood",
     x = "Proportion",
     y = "Neighborhood name",
-    fill = "Species name"
-  ) + scale_x_continuous(labels = scales::percent_format(scale = 1))
-
+    fill = "Species name") + 
+  # scale the x axis to log
+  scale_x_log10() + 
+  theme_minimal()+ 
+  # format the labels as percentages
+  scale_x_continuous(labels = scales::percent_format(scale = 1))
 ```
 
-**Research Question 4:** What is the change of tree population in Vancouver changed over time? In other words, the change of amount of the tree planted each year.
+**Research Question 3:** What is the change of tree population in Vancouver changed over time? In other words, the change in the amount of trees planted each year.
 
-Since the two variables in this research questions are date_planted and total number of trees, it is quite difficult to choose one summary task since all four somehoow relates to categorical variable. In order to make the data analysis close to my research question, I chose to create a categorical variable year_range with 4 groups from the date variable based on extracting the year information from the date variable instead of a numerical variable. 
+Since the two variables in this research question are date_planted (date) and the total number of trees(numerical), it is quite difficult to choose one summary task since all four somehow relate to categorical variables except option 3. In order to make the data analysis close to my research question, I chose to create a categorical variable year_range with 4 groups from the date variable based on extracting the year information from the date variable instead of a numerical variable. 
+
+**Option3 (summarizing)**
+
 ```{r}
 vancouver_trees <- vancouver_trees %>%
   #split year into 4 categories
@@ -238,12 +211,13 @@ tree_counts_by_year <- vancouver_trees %>%
   
   #count the total number of trees planted each year
   summarise(total_tree_count = n()) %>%
+  # set tibble to original state
   ungroup()
 print(tree_counts_by_year)
 ```
 
-**Task2** _(graphing)_
- Create a graph of the total Number of trees planted over years, x-axes is made logarithmic(year), and format the axes labels.
+**Option6 (graphing)**
+Create a graph of the total Number of trees planted over years, y-axes is made logarithmic (total number of tree planted), and format the axes labels.
 ```{r}
 # visualize the change in the amount of trees over years
 ggplot(tree_counts_by_year, aes(x = year_planted, y = total_tree_count)) +
@@ -258,6 +232,54 @@ ggplot(tree_counts_by_year, aes(x = year_planted, y = total_tree_count)) +
   theme_minimal() +
   scale_x_continuous(labels = scales::comma)
 ```
+
+**Research Question 4:** What is a change in the tree density of the top 5 most popular tree species in DOWNTOWN area from 2013 to 2019? 
+
+**Option2 (summarizing)**
+I calculate the number of observations for one of the categorical variables, neighborhood_name, and store it as neighbourhood_count. Since this research question is about the tree density of the top 5 most popular tree species in the DOWNTOWN area, it is useful to get a tibble that contains the total amount of trees planted for each neighborhood, which contains the information of DOWNTOWN. Based on the output tibble, it seems like a large of amount of trees were planted in the RENFREW-COLLINGWOOD, KENSINGTON-CEDAR COTTAGE, and HASTINGS-SUNRISE neighborhoods. DOWNTOWN has a round 5000, which is not bad. 
+
+```{r}
+# calculate the number of observations for each neighbourhood
+neighbourhood_count<- vancouver_trees %>%
+  group_by(neighbourhood_name) %>%
+  # get the number of tree planted in each neighborhood
+  summarise(observations = n()) %>%
+  # set tibble to original state
+  ungroup()
+
+print(neighbourhood_count)
+```
+
+**Option7 (graphing)**
+In order to further analyze the research question, I chose to filter out the DOWNTOWN area among all the neighborhoods, and I picked out the top 5 popular tree species based on the n variable for each species. Top 5 tree species in DOWNTOWN are "RUBRUM", "PLATANOIDES", "FREEMANI   X", "SYLVATICA", "BETULUS" respectively.
+
+```{r}
+# find the top 5 most popular species in downtown first
+# species_in_neighborhood tibble was created above
+species_in_downtown <- species_in_neighborhood %>%
+  filter(neighbourhood_name == "DOWNTOWN") 
+  
+print(species_in_downtown)
+```
+Therefore, I can graph the density plot of the top 5 most popular tree species in the DOWNTOWN area from 2013 to 2019. I adjust the alpha value to 0.4 since transparency matters here. With a smaller alpha value, I am able to see the change in the amount of trees planted over these years for different tree species. Based on the generated plot, it seems like the DOWNTOWN area started to plant a large amount of "PLATANOIDES" in 2017, whereas the amount of "RUBRUM" planted started to drop. The overall trend of planting "BETULUS" was also an up-trend and the overall trend of "FREEMANI   X" was a down-trend. It might be due to the change in climate conditions so that certain tree species would become more popular in certain districts.
+
+```{r}
+# filter the dataset for the downtown neighborhood and the top 5 popular species
+downtown_species <- vancouver_trees %>%
+  filter(neighbourhood_name == "DOWNTOWN" & 
+         year_planted >= 2013 & year_planted <= 2019 & 
+         species_name %in% c("RUBRUM", "PLATANOIDES","FREEMANI   X", "SYLVATICA", "BETULUS"))
+
+# create a density plot with personalized alpha value
+ggplot(data = downtown_species, aes(x = year_planted, fill = species_name)) +
+  geom_density(alpha = 0.4) +
+  labs(
+    title = "Density of the top 5 species in DOWNTOWN from 2013 to 2019",
+    x = "Year",
+    y = "Density"
+  ) + 
+  theme_minimal()
+```
 <!----------------------------------------------------------------------------->
 
 ### 1.3 (2 points)
@@ -265,9 +287,13 @@ ggplot(tree_counts_by_year, aes(x = year_planted, y = total_tree_count)) +
 Based on the operations that you've completed, how much closer are you to answering your research questions? Think about what aspects of your research questions remain unclear. Can your research questions be refined, now that you've investigated your data a bit more? Which research questions are yielding interesting results?
 
 <!------------------------- Write your answer here ---------------------------->
-Based on the above operations, I think my data analysis outputs relevant results to all the research questions. However, some data analysis results do not seem to be pretty useful. For example, the scatter plot of Research Question 1 does not seem to yield pretty useful results in terms of the relationship between tree diameter and the corresponding latitude or longitude. Based on the generated graphs, there is no obvious sign that certain longitude or latitude will largely affect the diameter of the trees. But in my opinion, the question is in fact interesting but no obvious relationship found between variables is a normal scenario in data analysis. The process of analyzing and processing the data is the most important thing.
+Based on the above operations, I think my data analysis outputs relevant results to all the research questions. Research Question 1 is yielding useful results, it shows a positive relationship between height_range_id diameter_mean and diameter_median. This information indicates that a tree with a larger height_range_id tends to have a larger diameter. The generated further proved this result.
 
-On the other hand, Research Question 3 yielded interesting results, from the generated plot, it is clear to see that each neighborhood has its favorite tree species. For example, downtown favors Rubrum the most, the proportion is almost 20% in the downtown area. Fairview also plants this kind of tree the most, occupying about 14% of the trees in that neighborhood. Also, Research Question 4 is yielding meaningful results. I plotted the total amount of trees planted over the years. it is clear to see from the plot that there is an increasing trend of tree planting plans starting from around 1990 to 1995, after that, there's no obvious increasing trend anymore. Whereas starting from the year 2013, the total amount of trees planted in Vancouver per year started to decrease. Therefore, I think these data analysis results are useful in urban planning, which indicates that the government should increase the total amount of trees planted every year.
+Meanwhile, Research Question 2 yields interesting results. Based on the generated plot, it is clear to see that each neighborhood has its favorite tree species. For example, downtown favors Rubrum the most, the proportion is almost 20% in the downtown area. Fairview also plants this kind of tree the most, occupying about 14% of the trees in that neighborhood. STRATHCONA seems to be the only neighborhood that favors the SYLVATICA tree species. PLATANOIDES and SERRULATA look like the favorite tree species for most neighborhood districts.
+
+At the same time, Research Question 3 is yielding meaningful results. I plotted the total amount of trees planted over the years. it is clear to see from the plot that there is an increasing trend of tree planting plans starting from around 1990 to 1995, after that, there's no obvious increasing trend anymore. Whereas starting from the year 2013, the total amount of trees planted in Vancouver per year started to decrease. Therefore, I think these data analysis results are useful in urban planning, which indicates that the government should increase the total amount of trees planted every year.
+
+Lastly, Research Question 4 shows the top 5 most popular tree species in the DOWNTOWN area from 2013 to 2019 through a density plot. With personalized lower alpha value, I was able to see the change in the amount of trees planted over these years for different tree species. The graph shows that the DOWNTOWN area started to plant a large amount of "PLATANOIDES" in 2017, whereas the amount of "RUBRUM" planted started to drop. More detailed observations are included in the above section. 
 
 <!----------------------------------------------------------------------------->
 
@@ -313,6 +339,7 @@ Be sure to explain your reasoning for this task. Show us the "before" and "after
 <!--------------------------- Start your work below --------------------------->
 
 **1.** Since my data is untidy, I will tidy the data. Before the task, the dataset is untidy as shown by the prompt message
+
 ```{r}
 # check for missing values in the entire dataset
 missing_value <- sum(is.na(vancouver_trees))
@@ -340,6 +367,7 @@ vancouver_trees <- vancouver_trees %>%
   drop_na(cultivar_name, plant_area, date_planted, longitude, latitude, year_planted)
 ```
 **2.** After tidying the data using tidyr package, check whether there is NA values now. It looks great, no missing values found in all columns.
+
 ```{r}
 #check again
 missing_value <- sum(is.na(vancouver_trees))
@@ -350,6 +378,7 @@ if (missing_value > 0) {
 }
 ```
 **3.** Set the dataset back to its original state
+
 ```{r}
 vancouver_trees <-vancouver_trees_cpy
 #check that the dataset is the original one
@@ -360,7 +389,6 @@ if (missing_value > 0) {
   cat("No missing values found!")
 }
 ```
-
 
 <!----------------------------------------------------------------------------->
 
@@ -392,10 +420,17 @@ Now, try to choose a version of your data that you think will be appropriate to 
 
 (If it makes more sense, then you can make/pick two versions of your data, one for each research question.) 
 
-**1.** The suitable data is species_in_neighborhood dataset that I created in Task 1. From the results generated below, SERRULATA has a count of 13357, which is the most popular tree species in Vancouver, followed by CERASIFERA and PLATANOIDES, which has 12031 and 11963 planted trees respectively.
+**1.** The suitable data is species_in_neighborhood dataset. From the results generated below, SERRULATA has a count of 13357, which is the most popular tree species in Vancouver, followed by CERASIFERA and PLATANOIDES, which has 12031 and 11963 planted trees respectively.
 ```{r}
-# calculate the total amount of each species in Vancouver area
+#Dataset for Q1
+species_in_neighborhood <- vancouver_trees %>%
+  count(neighbourhood_name, species_name) %>%
+  group_by(neighbourhood_name) %>%
+  mutate(total_count = sum(n),proportion = n / total_count) %>%
+  ungroup()
 glimpse(species_in_neighborhood)
+
+# calculate the total amount of each species in Vancouver area
 overall_species_counts <- species_in_neighborhood %>%
   group_by(species_name) %>%
   summarize(total_count = sum(n)) %>%
@@ -405,7 +440,7 @@ overall_species_counts <- species_in_neighborhood %>%
 print(overall_species_counts)
 ```
 
-**2.** The suitable dataset is vancouver_trees since I need to use the generated column year_planted and the species_name in the original dataset. As the results shown, over the period of 2013 and 2019, it seems like the popular tree species,SERRULATA and CERASIFERA have a decrease in planting as well as the RUBRUM. It may relate to some shifts and changes in urban plannings or the change in climate factors.
+**2.** The suitable dataset is vancouver_trees_filter since I need to filter out the year from 2013 to 2019 from th column year_planted. Meanwhile, I need to use the species_name columns. As the results shown, over the period of 2013 and 2019, it seems like the popular tree species,SERRULATA and CERASIFERA have a decrease in planting as well as the RUBRUM. It may relate to some shifts and changes in urban plannings or the change in climate factors.
 
 ```{r}
 # filter the dataset to select year between 2013 and 2019
@@ -438,7 +473,6 @@ decrease_species <- decrease_species %>%
   arrange(drop_amount)
 
 decrease_species
-
 ```
 <!--------------------------- Start your work below --------------------------->
 
