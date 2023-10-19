@@ -385,6 +385,7 @@ names(selected_data)[missing_val_col]
 selected_data <- selected_data %>%
   drop_na(plant_area, date_planted, longitude, latitude)
 ```
+
 **2.** After tidying the data using tidyr package, check whether there is NA values now. It looks great, no missing values found in all columns.
 
 ```{r}
@@ -396,6 +397,7 @@ if (missing_count > 0) {
   cat("No NA value detect!")
 }
 ```
+
 **3.** Set the dataset back to its original state
 
 ```{r}
@@ -471,7 +473,7 @@ species_counts <- vancouver_trees_filter %>%
   # group by the species and year 
   group_by(species_name, year_planted) %>%
   # count the number of trees planted
-  summarize(total_tree = n()) %>%
+  summarize(total_tree = n(), .groups = "drop") %>%
   ungroup()
 
 # create separate columns for each year

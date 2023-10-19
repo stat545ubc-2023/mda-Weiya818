@@ -1124,14 +1124,9 @@ species_counts <- vancouver_trees_filter %>%
   # group by the species and year 
   group_by(species_name, year_planted) %>%
   # count the number of trees planted
-  summarize(total_tree = n()) %>%
+  summarize(total_tree = n(), .groups = "drop") %>%
   ungroup()
-```
 
-    ## `summarise()` has grouped output by 'species_name'. You can override using the
-    ## `.groups` argument.
-
-``` r
 # create separate columns for each year
 wide_version <- species_counts %>%
   pivot_wider(names_from = year_planted, values_from = total_tree)
