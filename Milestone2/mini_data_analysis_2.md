@@ -99,14 +99,15 @@ question more clear to understand.)
 
 **Research Question 4:** What is a change in the tree density of the top
 5 most popular tree species in the DOWNTOWN area from 2013 to 2019?
-(This is a newly added question to replace the original research
+
+*This is a newly added question to replace the original research
 question 1, which is “How does the diameter of trees vary with the
 corresponding latitude or longitude coordinates in the dataset?” The
 generated scatter plot of the original Research Question 1 does not seem
 to yield pretty useful results in terms of the relationship between tree
 diameter and the corresponding latitude or longitude. Based on the
 generated graphs, there is no obvious sign that certain longitude or
-latitude will largely affect the diameter of the trees.)
+latitude will largely affect the diameter of the trees.*
 <!----------------------------------------------------------------------------->
 
 Here, we will investigate your data using various data manipulation and
@@ -166,7 +167,7 @@ for!
 **Research Question 1:** What is the relationship between the diameter
 and their height_range_id in the dataset?
 
-**Option1 (summarizing)** I compute the *range*, *mean*, and *median*
+**Option 1 (summarizing)** I compute the *range*, *mean*, and *median*
 and *std* of the diameter across the groups of height_range_id from the
 data. Based on the diameter_summary tibble, it seems there is a positive
 relationship between height_range_id and diameter_mean and
@@ -204,7 +205,7 @@ print(diameter_summary)
     ## 10               9    65    34.8      35    9.69
     ## 11              10    47    34.1      39   15.3
 
-**Option7 (graphing)** I graphed a density plot for diameter versus
+**Option 7 (graphing)** I graphed a density plot for diameter versus
 height_range_id, the different height_range_id are shown as fills. The
 alpha value is customed to be 0.5 since the transparency matters here.
 Based on the density plot generated below, we can see a clear
@@ -242,7 +243,7 @@ ggplot(data = filtered_dataset, aes(x = diameter)) +
 specific neighborhoods of Vancouver? In other words, are there any
 relationships between species_name and neighborhood_name?
 
-**Option4 (summarizing)** I compute the proportion and total_counts in
+**Option 4 (summarizing)** I compute the proportion and total_counts in
 each category of neighbourhood_name across the groups of species_name
 from the dataset in a tibble called species_in_neighborhood. With this
 tibble, I know the total and proportion of each species in the
@@ -271,7 +272,7 @@ head(species_in_neighborhood)
     ## 5 ARBUTUS-RIDGE      AMERICANA        225        5169   0.0435  
     ## 6 ARBUTUS-RIDGE      AQUIFOLIUM         3        5169   0.000580
 
-**Option6 (graphing)** I get the most popular species from the above
+**Option 6 (graphing)** I get the most popular species from the above
 tibble. Then I create a graph of the most prevalent tree species in each
 neighborhood, x-axis is the proportion and is made logarithmic, y-axis
 is the neighborhood name. Species_name is the fill. Based on the plot
@@ -327,10 +328,10 @@ ggplot(most_popular_species, aes(x = proportion, y = reorder(neighbourhood_name,
     y = "Neighborhood name",
     fill = "Species name") + 
   # scale the x axis to log
-  scale_x_log10() + 
-  theme_minimal()+ 
-  # format the labels as percentages
-  scale_x_continuous(labels = scales::percent_format(scale = 1))
+  scale_x_log10()+
+  # format the labels as percentages makes the graph visually appealing 
+  scale_x_continuous(labels = scales::percent_format(scale = 1))+
+  theme_minimal()
 ```
 
     ## Scale for x is already present.
@@ -342,23 +343,29 @@ ggplot(most_popular_species, aes(x = proportion, y = reorder(neighbourhood_name,
 Vancouver changed over time? In other words, the change in the amount of
 trees planted each year.
 
-Since the two variables in this research question are date_planted
-(date) and the total number of trees(numerical), it is quite difficult
-to choose one summary task since all four somehow relate to categorical
-variables except option 3. In order to make the data analysis close to
-my research question, I chose to create a categorical variable
-year_range with 4 groups from the date variable based on extracting the
-year information from the date variable instead of a numerical variable.
-
-**Option3 (summarizing)**
+**Option 3 (summarizing)** Since the two variables in this research
+question are date_planted (date) and the total number of
+trees(numerical), it is quite difficult to choose one summary task since
+all four somehow relate to categorical variables except option 3. In
+order to make the data analysis close to my research question, I chose
+to create a categorical variable year_range with 6 groups from the date
+variable based on extracting the year information from the date variable
+instead of a numerical variable. This transformation allows for a more
+focused analysis of the change in the number of trees planted in 5-year
+intervals, revealing broader trends.The creation of the year_range
+column offers a more intuitive way to examine the data. It allows us to
+observe variations in tree planting over larger time periods rather than
+on an individual yearly basis.
 
 ``` r
 vancouver_trees <- vancouver_trees %>%
-  #split year into 4 categories
+  #split year into 6 categories
   mutate(year_range = case_when( 
     year(date_planted) < 2000 ~ "Before 2000",
-    year(date_planted) >= 2000 & year(date_planted) <= 2010 ~ "2000-2010",
-    year(date_planted) > 2010 & year(date_planted) <= 2020 ~ "2010-2020",
+    year(date_planted) >= 2000 & year(date_planted) <= 2005 ~ "2000-2005",
+    year(date_planted) > 2005 & year(date_planted) <= 2010 ~ "2005-2010",
+    year(date_planted) > 2010 & year(date_planted) <= 2015 ~ "2010-2015",
+    year(date_planted) > 2015 & year(date_planted) <= 2020 ~ "2005-2020",
     TRUE ~ "After 2020"
   ))
 glimpse(vancouver_trees)
@@ -388,11 +395,61 @@ glimpse(vancouver_trees)
     ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
     ## $ year_range         <chr> "Before 2000", "Before 2000", "Before 2000", "Befor…
 
+**Option 6 (graphing)** For this graphing analysis, I decided to extract
+the year as a numerical variable. This decision was made with the goal
+of visualizing and understanding the patterns of tree planting in
+Vancouver over the years on a per-year basis. Therefore, I created a
+line graph of the total amount of trees planted over the years, y-axis
+is made logarithmic, which is the total amount of trees planted. the
+x-axis represents the year in which the tree was planted. In my opinion,
+a line plot provides a clear and detailed view of how tree planting has
+evolved annually. The categorical variable generated above named
+year_range can be useful in identifying long-term trends in tree
+planting practices in Vancouver. Meanwhile, it also makes it easy to
+compare tree planting patterns across different periods
+
+Based on the generated line chart, it is clear to see an increasing
+amount of tree planting starting from around 1990 to 1995. Then, after
+that, there’s no obvious increasing trend anymore. From the year 2013,
+the total amount of trees planted in Vancouver per year started to drop.
+It might be due to budget cuts or financial constraints, which result in
+reduced funding for tree planting initiatives. Meanwhile, some extreme
+weather events, such as droughts or storms, can also negatively affect
+tree planting.
+
 ``` r
 vancouver_trees <-vancouver_trees %>%
-  #create a new col year_planted through the data variable
-  mutate(year_planted = year(date_planted))
+  #create a new dbl col year_planted through the data variable
+   mutate(year_planted = year(date_planted))
+glimpse(vancouver_trees)
+```
 
+    ## Rows: 146,611
+    ## Columns: 22
+    ## $ tree_id            <dbl> 149556, 149563, 149579, 149590, 149604, 149616, 149…
+    ## $ civic_number       <dbl> 494, 450, 4994, 858, 5032, 585, 4909, 4925, 4969, 7…
+    ## $ std_street         <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
+    ## $ genus_name         <chr> "ULMUS", "ZELKOVA", "STYRAX", "FRAXINUS", "ACER", "…
+    ## $ species_name       <chr> "AMERICANA", "SERRATA", "JAPONICA", "AMERICANA", "C…
+    ## $ cultivar_name      <chr> "BRANDON", NA, NA, "AUTUMN APPLAUSE", NA, "CHANTICL…
+    ## $ common_name        <chr> "BRANDON ELM", "JAPANESE ZELKOVA", "JAPANESE SNOWBE…
+    ## $ assigned           <chr> "N", "N", "N", "Y", "N", "N", "N", "N", "N", "N", "…
+    ## $ root_barrier       <chr> "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "…
+    ## $ plant_area         <chr> "N", "N", "4", "4", "4", "B", "6", "6", "3", "3", "…
+    ## $ on_street_block    <dbl> 400, 400, 4900, 800, 5000, 500, 4900, 4900, 4900, 7…
+    ## $ on_street          <chr> "W 58TH AV", "W 58TH AV", "WINDSOR ST", "E 39TH AV"…
+    ## $ neighbourhood_name <chr> "MARPOLE", "MARPOLE", "KENSINGTON-CEDAR COTTAGE", "…
+    ## $ street_side_name   <chr> "EVEN", "EVEN", "EVEN", "EVEN", "EVEN", "ODD", "ODD…
+    ## $ height_range_id    <dbl> 2, 4, 3, 4, 2, 2, 3, 3, 2, 2, 2, 5, 3, 2, 2, 2, 2, …
+    ## $ diameter           <dbl> 10.00, 10.00, 4.00, 18.00, 9.00, 5.00, 15.00, 14.00…
+    ## $ curb               <chr> "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "…
+    ## $ date_planted       <date> 1999-01-13, 1996-05-31, 1993-11-22, 1996-04-29, 19…
+    ## $ longitude          <dbl> -123.1161, -123.1147, -123.0846, -123.0870, -123.08…
+    ## $ latitude           <dbl> 49.21776, 49.21776, 49.23938, 49.23469, 49.23894, 4…
+    ## $ year_range         <chr> "Before 2000", "Before 2000", "Before 2000", "Befor…
+    ## $ year_planted       <dbl> 1999, 1996, 1993, 1996, 1993, NA, 1993, 1993, 1993,…
+
+``` r
 # group the data by year 
 tree_counts_by_year <- vancouver_trees %>%
   group_by(year_planted) %>%
@@ -401,6 +458,7 @@ tree_counts_by_year <- vancouver_trees %>%
   summarise(total_tree_count = n()) %>%
   # set tibble to original state
   ungroup()
+
 print(tree_counts_by_year)
 ```
 
@@ -440,11 +498,11 @@ print(tree_counts_by_year)
     ## 31         2019             1069
     ## 32           NA            76548
 
-**Option6 (graphing)** Create a graph of the total Number of trees
-planted over years, y-axes is made logarithmic (total number of tree
-planted), and format the axes labels.
-
 ``` r
+# filter the NA value
+tree_counts_by_year <- tree_counts_by_year %>%
+  filter(!is.na(year_planted))
+
 # visualize the change in the amount of trees over years
 ggplot(tree_counts_by_year, aes(x = year_planted, y = total_tree_count)) +
   geom_line() +
@@ -459,15 +517,13 @@ ggplot(tree_counts_by_year, aes(x = year_planted, y = total_tree_count)) +
   scale_x_continuous(labels = scales::comma)
 ```
 
-    ## Warning: Removed 1 row containing missing values (`geom_line()`).
-
 ![](mini_data_analysis_2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 **Research Question 4:** What is a change in the tree density of the top
 5 most popular tree species in DOWNTOWN area from 2013 to 2019?
 
-**Option2 (summarizing)** I calculate the number of observations for one
-of the categorical variables, neighborhood_name, and store it as
+**Option 2 (summarizing)** I calculate the number of observations for
+one of the categorical variables, neighborhood_name, and store it as
 neighbourhood_count. Since this research question is about the tree
 density of the top 5 most popular tree species in the DOWNTOWN area, it
 is useful to get a tibble that contains the total amount of trees
@@ -515,7 +571,7 @@ print(neighbourhood_count)
     ## 21 WEST END                         3507
     ## 22 WEST POINT GREY                  4939
 
-**Option7 (graphing)** In order to further analyze the research
+**Option 7 (graphing)** In order to further analyze the research
 question, I chose to filter out the DOWNTOWN area among all the
 neighborhoods, and I picked out the top 5 popular tree species based on
 the n variable for each species. Top 5 tree species in DOWNTOWN are
@@ -674,7 +730,7 @@ the SYLVATICA tree species. PLATANOIDES and SERRULATA look like the
 favorite tree species for most neighborhood districts.
 
 At the same time, Research Question 3 is yielding meaningful results. I
-plotted the total amount of trees planted over the years. it is clear to
+plotted the total amount of trees planted over the years. It is clear to
 see from the plot that there is an increasing trend of tree planting
 plans starting from around 1990 to 1995, after that, there’s no obvious
 increasing trend anymore. Whereas starting from the year 2013, the total
@@ -810,7 +866,10 @@ if (missing_count > 0) {
     ## Untidy! It contains NA value!
 
 ``` r
-# check the NA columns
+# keep a copy of the original untidy daataset
+selected_data_cpy <- selected_data
+
+# check the columns with NA value
 missing_val_col <- selected_data %>%
   summarise_all(~sum(is.na(.))) %>%
   as.logical()
@@ -822,9 +881,6 @@ names(selected_data)[missing_val_col]
     ## [1] "date_planted" "plant_area"   "longitude"    "latitude"
 
 ``` r
-#keep a copy of the original untidy daataset
-selected_data_cpy <- selected_data
-
 # remove the rows with missing values in these columns
 selected_data <- selected_data %>%
   drop_na(plant_area, date_planted, longitude, latitude)
@@ -835,7 +891,7 @@ is NA values now. It looks great, no missing values found in all
 columns.
 
 ``` r
-#check again
+# check again
 missing_count <- sum(is.na(selected_data))
 if (missing_count > 0) {
   cat("Untidy! It contains NA value!")
@@ -850,7 +906,7 @@ if (missing_count > 0) {
 
 ``` r
 selected_data <-selected_data_cpy
-#check that the dataset is the original one
+# check that the dataset is the original one
 missing_count <- sum(is.na(selected_data))
 if (missing_count > 0) {
   cat("Untidy! It contains NA value!")
