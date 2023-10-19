@@ -385,6 +385,7 @@ names(selected_data)[missing_val_col]
 selected_data <- selected_data %>%
   drop_na(plant_area, date_planted, longitude, latitude)
 ```
+
 **2.** After tidying the data using tidyr package, check whether there is NA values now. It looks great, no missing values found in all columns.
 
 ```{r}
@@ -396,6 +397,7 @@ if (missing_count > 0) {
   cat("No NA value detect!")
 }
 ```
+
 **3.** Set the dataset back to its original state
 
 ```{r}
