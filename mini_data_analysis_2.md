@@ -712,9 +712,10 @@ pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
 
-From the glimpse() function, each row represents a tree observation, and
-each column corresponds to a specific variable.It seems quite tidy from
-thi aspect.
+From the glimpse() function, It seems like each column specifies a
+distinct variable and each row is an observation, which represents a
+record of planted tree. and each cell contains a single value. It seems
+quite tidy from this aspect.
 
 ``` r
 glimpse(vancouver_trees)
@@ -746,7 +747,8 @@ glimpse(vancouver_trees)
     ## $ year_planted       <dbl> 1999, 1996, 1993, 1996, 1993, NA, 1993, 1993, 1993,…
 
 However, based on the results, the vancouver_trees dataset contains
-missing values in certain columns, so it is untidy.
+missing values in certain columns if we track it with is.na() function,
+so it is untidy.
 
 ``` r
 missing_value <- sum(is.na(vancouver_trees))
@@ -853,16 +855,15 @@ analysis in the remaining tasks:
 
 <!-------------------------- Start your work below ---------------------------->
 
-I pick the Research Question 3 and 4 in Task 1
+I pick the Research Question 2 and 3 in Task 1
 
 **1.** Are certain tree species more prevalent in specific neighborhoods
-of Vancouver? In other words, is there any relationships between
+of Vancouver? In other words, are there any relationships between
 species_name and neighborhood_name?
 
 **2.** What is the change of tree population in Vancouver changed over
-time? In other words, the change of amount of the tree planted each
+time? In other words, the change in the amount of trees planted each
 year.
-
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
@@ -871,7 +872,7 @@ Explain your decision for choosing the above two research questions.
 
 **1.** As described before, this research question achieved interesting
 results. There relationship between species_name and neighbourhood_name
-exists. I think further possible analysis can be what is the most
+exists. I think further possible follow-question can be what is the most
 popular tree species in the whole Vancouver area?
 
 **2.** This research question is meaningful in terms of urban planning
@@ -896,11 +897,12 @@ most popular tree species in Vancouver, followed by CERASIFERA and
 PLATANOIDES, which has 12031 and 11963 planted trees respectively.
 
 ``` r
-#Dataset for Q1
+#Suitable dataset for Q1
 species_in_neighborhood <- vancouver_trees %>%
   count(neighbourhood_name, species_name) %>%
   group_by(neighbourhood_name) %>%
   mutate(total_count = sum(n),proportion = n / total_count) %>%
+  # reset back to original state 
   ungroup()
 glimpse(species_in_neighborhood)
 ```
@@ -919,6 +921,7 @@ overall_species_counts <- species_in_neighborhood %>%
   group_by(species_name) %>%
   summarize(total_count = sum(n)) %>%
   arrange(desc(total_count)) %>%
+  # reset back to original state
   ungroup()
 
 print(overall_species_counts)
@@ -1038,6 +1041,7 @@ the RUBRUM. It may relate to some shifts and changes in urban plannings
 or the change in climate factors.
 
 ``` r
+#Suitable dataset for Q2
 # filter the dataset to select year between 2013 and 2019
 vancouver_trees_filter <- vancouver_trees %>%
   filter(year_planted >= 2013, year_planted <= 2019)
@@ -1124,9 +1128,11 @@ these.
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: I chose Research Question1, what is the
+relationship between the diameter and their height_range_id in the
+dataset?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: diameter
 
 <!----------------------------------------------------------------------------->
 
@@ -1151,6 +1157,29 @@ specifics in STAT 545.
     coefficients.
 
 <!-------------------------- Start your work below ---------------------------->
+
+For this question, I fit a linear regression model to discover the
+relationship between diameter and height of tree to further prove
+whether they have positive relationship.
+
+``` r
+# fit a model
+diameter_model <- lm(diameter ~ height_range_id, data = vancouver_trees)
+diameter_model
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = diameter ~ height_range_id, data = vancouver_trees)
+    ## 
+    ## Coefficients:
+    ##     (Intercept)  height_range_id  
+    ##         -0.3859           4.5208
+
+Based on the result, we have a positive slope, which is 4.5208 and an
+intercept of value -0.3859. I think in this context, a positive
+coefficient of 4.5208 suggests that there is somehow a positive linear
+relationship between diameter and height_range_id variable.
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (3 points)
@@ -1168,6 +1197,46 @@ Y, or a single value like a regression coefficient or a p-value.
   which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+
+I produce the coefficient and p-value using the tidy function in the
+broom package.
+
+``` r
+library(broom)
+
+# use tidy function get the coefficients and p-values
+output_tibble <- tidy(diameter_model)
+#output tibble
+output_tibble
+```
+
+    ## # A tibble: 2 × 5
+    ##   term            estimate std.error statistic  p.value
+    ##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+    ## 1 (Intercept)       -0.386    0.0310     -12.4 1.65e-35
+    ## 2 height_range_id    4.52     0.0102     444.  0
+
+I also use augment() function to get the prediction on Y (diameter),
+which is shown in the .fitted column. As we can see from the predicted
+result, the prediction in fact varied if we compare the .fitted column
+with diameter column.
+
+``` r
+# prediction of y value (diameter) is shown in the .fitted column
+y_data <- augment(diameter_model)
+head(y_data)
+```
+
+    ## # A tibble: 6 × 8
+    ##   diameter height_range_id .fitted .resid       .hat .sigma   .cooksd .std.resid
+    ##      <dbl>           <dbl>   <dbl>  <dbl>      <dbl>  <dbl>     <dbl>      <dbl>
+    ## 1       10               2    8.66  1.34  0.00000795   6.02   1.98e-7     0.223 
+    ## 2       10               4   17.7  -7.70  0.0000122    6.02   1.00e-5    -1.28  
+    ## 3        4               3   13.2  -9.18  0.00000722   6.02   8.40e-6    -1.53  
+    ## 4       18               4   17.7   0.303 0.0000122    6.02   1.55e-8     0.0503
+    ## 5        9               2    8.66  0.344 0.00000795   6.02   1.30e-8     0.0572
+    ## 6        5               2    8.66 -3.66  0.00000795   6.02   1.47e-6    -0.608
+
 <!----------------------------------------------------------------------------->
 
 # Task 4: Reading and writing data
@@ -1189,6 +1258,17 @@ file in your `output` folder. Use the `here::here()` function.
   file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+library(here)
+```
+
+    ## here() starts at /Users/weiyazhu/mda-Weiya818
+
+``` r
+write_csv(filtered_dataset, here("output/filtered_data.csv"))
+```
+
 <!----------------------------------------------------------------------------->
 
 ## 4.2 (3 points)
@@ -1200,6 +1280,15 @@ Use the functions `saveRDS()` and `readRDS()`.
 - The same robustness and reproducibility criteria as in 4.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+
+``` r
+# write diameter_model from Task 3 to an R binary file
+saveRDS(diameter_model, "output/diameter_model.rds")
+
+# load the model
+diameter_model <- readRDS("output/diameter_model.rds")
+```
+
 <!----------------------------------------------------------------------------->
 
 # Overall Reproducibility/Cleanliness/Coherence Checklist

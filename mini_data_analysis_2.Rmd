@@ -312,11 +312,13 @@ A reminder of the definition of *tidy* data:
 Based on the definition above, can you identify if your data is tidy or untidy? Go through all your columns, or if you have \>8 variables, just pick 8, and explain whether the data is untidy or tidy.
 
 <!--------------------------- Start your work below --------------------------->
-From the glimpse() function, each row represents a tree observation, and each column corresponds to a specific variable.It seems quite tidy from thi aspect.
+From the glimpse() function, It seems like each column specifies a distinct variable and each row is an observation, which represents a record of planted tree. and each cell contains a single value. It seems quite tidy from this aspect.
+
 ```{r}
 glimpse(vancouver_trees)
 ```
-However, based on the results, the vancouver_trees dataset contains missing values in certain columns, so it is untidy.
+However, based on the results, the vancouver_trees dataset contains missing values in certain columns if we track it with is.na() function, so it is untidy.
+
 ```{r}
 missing_value <- sum(is.na(vancouver_trees))
 if (missing_value > 0) {
@@ -325,7 +327,6 @@ if (missing_value > 0) {
   cat("No missing values found!")
 }
 ```
-
 <!----------------------------------------------------------------------------->
 
 ### 2.2 (4 points)
@@ -397,21 +398,17 @@ if (missing_value > 0) {
 Now, you should be more familiar with your data, and also have made progress in answering your research questions. Based on your interest, and your analyses, pick 2 of the 4 research questions to continue your analysis in the remaining tasks:
 
 <!-------------------------- Start your work below ---------------------------->
-I pick the Research Question 3 and 4 in Task 1
+I pick the Research Question 2 and 3 in Task 1
 
-**1.** Are certain tree species more prevalent in
-specific neighborhoods of Vancouver? In other words, is there any
-relationships between species_name and neighborhood_name?
+**1.** Are certain tree species more prevalent in specific neighborhoods of Vancouver? In other words, are there any relationships between species_name and neighborhood_name?
 
-**2.** What is the change of tree population in
-Vancouver changed over time? In other words, the change of amount of the tree planted each year.
-
+**2.** What is the change of tree population in Vancouver changed over time? In other words, the change in the amount of trees planted each year.
 <!----------------------------------------------------------------------------->
 
 Explain your decision for choosing the above two research questions.
 
 <!--------------------------- Start your work below --------------------------->
-**1.** As described before, this research question achieved interesting results. There relationship between species_name and neighbourhood_name exists. I think further possible analysis can be what is the most popular tree species in the whole Vancouver area?
+**1.** As described before, this research question achieved interesting results. There relationship between species_name and neighbourhood_name exists. I think further possible follow-question can be what is the most popular tree species in the whole Vancouver area? 
 
 **2.** This research question is meaningful in terms of urban planning since the decrease in the amount of trees planted each year tells us that more trees definitely need to be planted in the future. Further analysis can discover whether there has been a decrease in planting some specific kinds of trees over these years. What are some possible reasons for that?
 <!----------------------------------------------------------------------------->
@@ -422,11 +419,12 @@ Now, try to choose a version of your data that you think will be appropriate to 
 
 **1.** The suitable data is species_in_neighborhood dataset. From the results generated below, SERRULATA has a count of 13357, which is the most popular tree species in Vancouver, followed by CERASIFERA and PLATANOIDES, which has 12031 and 11963 planted trees respectively.
 ```{r}
-#Dataset for Q1
+#Suitable dataset for Q1
 species_in_neighborhood <- vancouver_trees %>%
   count(neighbourhood_name, species_name) %>%
   group_by(neighbourhood_name) %>%
   mutate(total_count = sum(n),proportion = n / total_count) %>%
+  # reset back to original state 
   ungroup()
 glimpse(species_in_neighborhood)
 
@@ -435,6 +433,7 @@ overall_species_counts <- species_in_neighborhood %>%
   group_by(species_name) %>%
   summarize(total_count = sum(n)) %>%
   arrange(desc(total_count)) %>%
+  # reset back to original state
   ungroup()
 
 print(overall_species_counts)
@@ -443,6 +442,7 @@ print(overall_species_counts)
 **2.** The suitable dataset is vancouver_trees_filter since I need to filter out the year from 2013 to 2019 from th column year_planted. Meanwhile, I need to use the species_name columns. As the results shown, over the period of 2013 and 2019, it seems like the popular tree species,SERRULATA and CERASIFERA have a decrease in planting as well as the RUBRUM. It may relate to some shifts and changes in urban plannings or the change in climate factors.
 
 ```{r}
+#Suitable dataset for Q2
 # filter the dataset to select year between 2013 and 2019
 vancouver_trees_filter <- vancouver_trees %>%
   filter(year_planted >= 2013, year_planted <= 2019)
@@ -484,9 +484,9 @@ Pick a research question from 1.2, and pick a variable of interest (we'll call i
 
 <!-------------------------- Start your work below ---------------------------->
 
-**Research Question**: FILL_THIS_IN
+**Research Question**: I chose Research Question1, what is the relationship between the diameter and their height_range_id in the dataset?
 
-**Variable of interest**: FILL_THIS_IN
+**Variable of interest**: diameter
 
 <!----------------------------------------------------------------------------->
 
@@ -501,7 +501,15 @@ Fit a model or run a hypothesis test that provides insight on this variable with
     -   You could use `lm()` to test for significance of regression coefficients.
 
 <!-------------------------- Start your work below ---------------------------->
+For this question, I fit a linear regression model to discover the relationship between diameter and height of tree to further prove whether they have positive relationship. 
 
+```{r}
+# fit a model
+diameter_model <- lm(diameter ~ height_range_id, data = vancouver_trees)
+diameter_model
+```
+
+Based on the result, we have a positive slope, which is 4.5208 and an intercept of value -0.3859. I think in this context, a positive coefficient of 4.5208 suggests that there is somehow a positive linear relationship between diameter and height_range_id variable.
 <!----------------------------------------------------------------------------->
 
 ## 3.2 (3 points)
@@ -513,6 +521,22 @@ Produce something relevant from your fitted model: either predictions on Y, or a
 -   Obtain your results using the `broom` package if possible. If your model is not compatible with the broom function you're needing, then you can obtain your results by some other means, but first indicate which broom function is not compatible.
 
 <!-------------------------- Start your work below ---------------------------->
+I produce the coefficient and p-value using the tidy function in the broom package. 
+```{r}
+library(broom)
+
+# use tidy function get the coefficients and p-values
+output_tibble <- tidy(diameter_model)
+#output tibble
+output_tibble
+```
+
+I also use augment() function to get the prediction on Y (diameter), which is shown in the .fitted column. As we can see from the predicted result, the prediction in fact varied if we compare the .fitted column with diameter column.
+```{r}
+# prediction of y value (diameter) is shown in the .fitted column
+y_data <- augment(diameter_model)
+head(y_data)
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -528,6 +552,11 @@ Take a summary table that you made from Task 1, and write it as a csv file in yo
 -   **Reproducibility criteria**: You should be able to delete the csv file, and remake it simply by knitting this Rmd file.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+library(here)
+
+write_csv(filtered_dataset, here("output/filtered_data.csv"))
+```
 
 <!----------------------------------------------------------------------------->
 
@@ -538,7 +567,13 @@ Write your model object from Task 3 to an R binary file (an RDS), and load it ag
 -   The same robustness and reproducibility criteria as in 4.1 apply here.
 
 <!-------------------------- Start your work below ---------------------------->
+```{r}
+# write diameter_model from Task 3 to an R binary file
+saveRDS(diameter_model, "output/diameter_model.rds")
 
+# load the model
+diameter_model <- readRDS("output/diameter_model.rds")
+```
 <!----------------------------------------------------------------------------->
 
 # Overall Reproducibility/Cleanliness/Coherence Checklist 
