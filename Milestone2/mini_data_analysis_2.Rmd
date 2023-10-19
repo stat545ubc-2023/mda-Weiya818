@@ -330,7 +330,7 @@ From the glimpse() function, It seems like each column specifies a distinct vari
 glimpse(vancouver_trees)
 ```
 Now, I select 8 columns from the vancouver_trees dataset.
-````{r}
+```{r}
 selected_data<- vancouver_trees %>% select(date_planted, plant_area, longitude, height_range_id, latitude , neighbourhood_name, diameter, species_name)
 glimpse(selected_data)
 ```
