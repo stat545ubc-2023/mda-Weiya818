@@ -1259,6 +1259,9 @@ file in your `output` folder. Use the `here::here()` function.
 
 <!-------------------------- Start your work below ---------------------------->
 
+I would like to write the most_popular_species table I amde from Task1
+to a csv file.
+
 ``` r
 library(here)
 ```
@@ -1266,7 +1269,7 @@ library(here)
     ## here() starts at /Users/weiyazhu/mda-Weiya818
 
 ``` r
-write_csv(filtered_dataset, here("output/filtered_data.csv"))
+write_csv(most_popular_species, here("output/most_popular_species.csv"))
 ```
 
 <!----------------------------------------------------------------------------->
