@@ -1,4 +1,4 @@
-# README file for M2 _(Weiya Zhu)_
+# README file for M2 
 
 ## Project Description
  * Milestone 2
