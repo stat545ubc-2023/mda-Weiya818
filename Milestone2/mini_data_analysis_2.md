@@ -687,7 +687,7 @@ popular in certain districts.
 downtown_species <- vancouver_trees %>%
   filter(neighbourhood_name == "DOWNTOWN" & 
          year_planted >= 2013 & year_planted <= 2019 & 
-         species_name %in% c("RUBRUM", "PLATANOIDES","FREEMANI   X", "SYLVATICA", "BETULUS"))
+         species_name %in% c("RUBRUM", "PLATANOIDES", "FREEMANI   X", "SYLVATICA", "BETULUS"))
 
 # create a density plot with personalized alpha value
 ggplot(data = downtown_species, aes(x = year_planted, fill = species_name)) +
